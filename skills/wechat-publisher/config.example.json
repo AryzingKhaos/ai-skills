@@ -1,0 +1,6 @@
+{
+  "_comment": "拷贝这份到 /Users/aaron/code/writerForSelfMedia/.wechat-config.json 并填入真实凭证。不要把含真值的 config 入 git。",
+  "appid": "wx0000000000000000",
+  "appsecret": "your-app-secret-here",
+  "author": "你的默认作者署名"
+}
