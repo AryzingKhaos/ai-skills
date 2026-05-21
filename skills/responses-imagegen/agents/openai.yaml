@@ -1,0 +1,4 @@
+interface:
+  display_name: "Responses ImageGen"
+  short_description: "Generate PNG images through a Responses API image endpoint."
+  default_prompt: "Generate an image: a cream Labrador solving a middle school physics problem in a classroom, realistic style."

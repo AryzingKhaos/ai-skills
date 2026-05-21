@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 """
-端到端发布脚本：md 文件 → 微信公众号草稿箱。
+端到端发布脚本：HTML 文件 + 封面图 → 微信公众号草稿箱。
+
+前置：HTML 应该由 web-artifacts-builder 产出（单文件 / 内联样式 / 无外部依赖）。
+本脚本只做"清洗 + 上传"，不做"排版美化"。
 
 用法：
   python3 publish.py \
     --config /path/to/.wechat-config.json \
-    --md /path/to/article.publish.md \
+    --html /path/to/article.html \
     [--cover /path/to/cover.jpg] \
     [--digest "摘要"] \
     [--author "作者"] \
@@ -24,7 +27,7 @@ from pathlib import Path
 # 确保能 import 同目录下的模块
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from md_to_html import convert  # noqa: E402
+from html_prep import prepare  # noqa: E402
 from wechat_client import WeChatClient, WeChatConfig, WeChatError  # noqa: E402
 
 
@@ -36,11 +39,18 @@ DRAFT_CONSOLE_URL = (
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--config", required=True, help="微信凭证 JSON 路径")
-    parser.add_argument("--md", required=True, help="发布版 markdown 路径")
+    parser.add_argument(
+        "--html", required=True, help="排版好的 HTML 文件路径（由 web-artifacts-builder 产出）"
+    )
     parser.add_argument("--cover", help="封面图本地路径（建议传，发布时必需）")
     parser.add_argument("--digest", default="", help="摘要（54 字以内）")
     parser.add_argument("--author", default="", help="作者署名（覆盖 config 中的默认值）")
     parser.add_argument("--source-url", default="", help="原文链接")
+    parser.add_argument(
+        "--title",
+        default="",
+        help="标题（默认从 HTML <title> 或第一个 <h1> 提取）",
+    )
     parser.add_argument(
         "--need-open-comment",
         type=int,
@@ -58,16 +68,16 @@ def main() -> int:
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="只转换 HTML 并打印，不上传到微信",
+        help="只清洗 HTML 并打印，不调微信",
     )
     args = parser.parse_args()
 
-    md_path = Path(args.md).resolve()
-    if not md_path.exists():
-        print(f"错误：md 文件不存在 {md_path}", file=sys.stderr)
+    html_path = Path(args.html).resolve()
+    if not html_path.exists():
+        print(f"错误：HTML 文件不存在 {html_path}", file=sys.stderr)
         return 2
 
-    md_text = md_path.read_text(encoding="utf-8")
+    html_text = html_path.read_text(encoding="utf-8")
 
     if args.dry_run:
         client = None
@@ -80,15 +90,16 @@ def main() -> int:
             return 2
         client = WeChatClient(config)
 
-    print(f"→ 转换 markdown：{md_path}")
+    print(f"→ 清洗 HTML：{html_path}")
     try:
-        title, html, warnings = convert(md_text, md_path.parent, client)
+        extracted_title, cleaned, warnings = prepare(html_text, html_path.parent, client)
     except ValueError as exc:
         print(f"错误：{exc}", file=sys.stderr)
         return 2
 
+    title = args.title.strip() or extracted_title
     print(f"  标题：{title}")
-    print(f"  HTML 长度：{len(html)} 字符")
+    print(f"  清洗后 HTML 长度：{len(cleaned)} 字符")
     for w in warnings:
         print(f"  ⚠ {w}")
 
@@ -100,7 +111,7 @@ def main() -> int:
 
     if args.dry_run:
         print("\n--- dry-run HTML (前 800 字) ---")
-        print(html[:800])
+        print(cleaned[:800])
         print("...\n")
         return 0
 
@@ -126,7 +137,7 @@ def main() -> int:
         "title": title,
         "author": author,
         "digest": digest,
-        "content": html,
+        "content": cleaned,
         "content_source_url": args.source_url,
         "need_open_comment": args.need_open_comment,
         "only_fans_can_comment": args.only_fans_can_comment,
