@@ -12,11 +12,17 @@ roleflow/
 ├── context/
 │   ├── project.md              # 项目介绍占位
 │   ├── roles/                  # 角色实例层：每个角色一份“引用原型”的壳文件
-│   │   ├── common.md           # v2 工件命名规范（本文档 §模板 提供）
+│   │   ├── common.md           # 实例层公共规范（引用 base/common.md；本文档 §模板 提供）
 │   │   ├── index.md            # 角色清单（本步骤生成）
 │   │   └── <各角色>.md         # 全局原型层每个角色对应一份壳，开头引用其原型
-│   ├── standards/
-│   │   └── index.md            # 占位索引
+│   ├── standards/              # 从 templates/standards/ 预置（init 唯一带实际内容的目录）
+│   │   ├── coding-standards.md       # 预置内容
+│   │   ├── code-style.md             # 预置内容
+│   │   ├── style-standards.md        # 预置内容
+│   │   ├── test-case-standards.md    # 预置内容
+│   │   ├── common-mistakes.md        # 留空
+│   │   ├── component-index.md        # 留空
+│   │   └── index.md                  # 标准目录索引（随模板带入）
 │   ├── architecture/
 │   │   └── index.md
 │   ├── domain/
@@ -35,9 +41,10 @@ roleflow/
 
 - **第一层只要 `context/` + `tasks/`**：v1 的各角色独立输出目录（`clarifications/`、`explorations/`、`implementation/`、`reviews/`、`testDesign/`、`daily-reports/`、`weekly-reports/` 等）在 v2 里已统一收敛进 `tasks/[版本号]/[任务ID]/`，无需再建。`commands/`、`buleprints`（软链）不属于脚手架。
 - **`context/` 下 7 个子目录全建**：`roles` / `standards` / `architecture` / `domain` / `features` / `security` / `workflows` 都被角色或 workflow 引用，且 archivist 角色会维护其中 6 个的 `index.md`。
-- **`tasks/` 留空**：不预建 `[版本号]` 子目录、不预建 `taskIndex.md`；这些由首次注册任务时按需创建（见 common.md §10）。
+- **`context/standards/` 预置实际内容**：从 `/Users/aaron/code/roleflow/templates/standards/` 拷入 6 份标准文件（`coding-standards` / `code-style` / `style-standards` / `test-case-standards` 有内容，`common-mistakes` / `component-index` 留空）+ `index.md`，是 init 唯一带实际规范内容的目录；其余 context 子目录只给占位 `index.md`。
+- **`tasks/` 留空**：不预建 `[版本号]` 子目录、不预建 `taskIndex.md`；这些由首次注册任务时按需创建（见 base/common.md §10）。
 - **`context/roles/` 必须填充全部角色，而非留空**：roleflowv2 主命令 Step 2「命中第一个存在的目录即停」。若 `roleflow/context/roles/` 存在却为空（或缺某个角色），会**遮蔽全局原型层**，导致 `/roleflowv2 <角色>` 找不到该角色文件；且 `tasks/` 落盘根是从命中的 roles 目录推导的。因此必须为全局原型层的**每一个角色**都建出对应实例文件。
-- **角色实例文件是“引用原型的壳”，不是原型的拷贝**：每份壳文件开头先用 `> 角色原型：/Users/aaron/code/roleflow/roles/<role>.md` 引好全局原型，再用 `> 公共规范：roleflow/context/roles/common.md` 引好本项目公共规范；正文留“本项目补充”占位。加载该角色时，先读壳文件、并按壳里的「角色原型」指针一并参考原型定义。这样新项目既不遮蔽原型、又保留逐角色做项目特化的入口。
+- **角色实例文件是“引用原型的壳”，不是原型的拷贝**：每份壳文件开头先用 `> 角色原型：/Users/aaron/code/roleflow/roles/<role>.md` 引好该角色的全局原型，再用 `> 公共原型：/Users/aaron/code/roleflow/roles/base/common.md` 引好全局公共基类（任务工件命名 §1–§10 + 协作原则），最后用 `> 公共规范：roleflow/context/roles/common.md` 引好本项目公共规范；正文留“本项目补充”占位。加载该角色时，先读壳文件，并按其中的「角色原型」「公共原型」指针一并参考。这样新项目既不遮蔽原型、又保留逐角色做项目特化的入口。
 
 ## 执行步骤
 
@@ -81,6 +88,7 @@ for f in "$SRC"/*.md; do
   {
     printf '%s\n\n' "$title"
     printf '> 角色原型：%s/%s.md\n' "$SRC" "$base"
+    printf '> 公共原型：%s/base/common.md\n' "$SRC"
     printf '> 公共规范：roleflow/context/roles/common.md\n\n'
     printf '## 本项目补充\n\n'
     printf '（待补充：本项目对该角色的实例化约束，如输出路径、专项检查、命名细则等。在补充之前，加载本角色时请先阅读上方「角色原型」文件并按其执行。）\n'
@@ -95,6 +103,7 @@ done
 # Builder（实现工程师）
 
 > 角色原型：/Users/aaron/code/roleflow/roles/builder.md
+> 公共原型：/Users/aaron/code/roleflow/roles/base/common.md
 > 公共规范：roleflow/context/roles/common.md
 
 ## 本项目补充
@@ -102,24 +111,41 @@ done
 （待补充：……在补充之前，加载本角色时请先阅读上方「角色原型」文件并按其执行。）
 ```
 
-然后写 `roleflow/context/roles/common.md`（用本文档 §模板：common.md 的内容整份写入）——角色壳文件正文里的"common.md §N"引用全靠这份。
+然后写 `roleflow/context/roles/common.md`（实例层公共规范，用本文档 §模板：common.md 写入）——它只放项目介绍 / 输出语言 / 路径引用规则，任务工件命名 §1–§10 指回 `base/common.md`，不再重复那套规范（角色壳文件正文里引用的"§N"也指向 `base/common.md`）。
 
-### Step 4：写占位文件
+### Step 4：填充 `context/standards/`（从模板预置）
+
+把 `/Users/aaron/code/roleflow/templates/standards/` 整目录拷入：
+
+```
+cp /Users/aaron/code/roleflow/templates/standards/*.md roleflow/context/standards/
+```
+
+拷入 7 份文件：
+
+- `coding-standards.md` / `code-style.md` / `style-standards.md` / `test-case-standards.md` —— 预置内容（源自 TronLink 项目，可按本项目改写）
+- `common-mistakes.md` / `component-index.md` —— **留空**（0 字节），由项目自行积累 / 补充
+- `index.md` —— 标准目录索引（随模板带入）
+
+> 这是 init 唯一**预置实际内容**的目录。要改新项目的默认规范，直接改 `/Users/aaron/code/roleflow/templates/standards/`，init 照拷，无需改本文档。
+
+### Step 5：写占位文件
 
 1. `roleflow/context/project.md` ← 本文档 §模板：project.md。
-2. 以下 6 个子目录各写一份 `index.md` 占位（用 §模板：index.md，把 `<目录名>` 替换为对应目录名）：
-   `standards` / `architecture` / `domain` / `features` / `security` / `workflows`。
-   （`roles/index.md` 已由 Step 3 生成，不必重写。）
+2. 以下 5 个子目录各写一份 `index.md` 占位（用 §模板：index.md，把 `<目录名>` 替换为对应目录名）：
+   `architecture` / `domain` / `features` / `security` / `workflows`。
+   （`roles/index.md` 由 Step 3 生成、`standards/index.md` 由 Step 4 随模板带入，均不必重写。）
 3. `roleflow/tasks/.gitkeep` ← 空文件。
 
-### Step 5：收尾确认
+### Step 6：收尾确认
 
 向用户输出（不超过 8 行）：
 
 ```
 已在 <cwd>/roleflow/ 初始化 roleflow(v2) 骨架：
-- context/roles/      ← 为全局原型每个角色生成“引用原型”的壳文件 N 份 + v2 common.md + index.md
-- context/{standards,architecture,domain,features,security,workflows}/ ← 各含占位 index.md
+- context/roles/      ← 为全局原型每个角色生成“引用原型 + base”的壳文件 N 份 + 实例层 common.md + index.md
+- context/standards/  ← 从 templates 预置 4 份规范 + 2 份留空（common-mistakes / component-index）+ index.md
+- context/{architecture,domain,features,security,workflows}/ ← 各含占位 index.md
 - context/project.md  ← 占位，请补充项目背景
 - tasks/              ← 留空（首个任务由 /roleflowv2 <角色> <任务名> 注册时创建）
 下一步：用 /roleflowv2 <角色名> <任务名称> 开始第一个任务。
@@ -130,20 +156,21 @@ done
 - **绝不覆盖**已存在的 `roleflow/`；只在全新目录上脚手架。
 - 角色实例文件是**引用原型的壳**（开头 `> 角色原型：/Users/aaron/code/roleflow/roles/<role>.md`），不要把原型正文整段拷进来，也不要凭空编造新角色；必须覆盖全局原型层的全部角色，逐一对应。全局原型层缺失时停下来问用户来源。
 - `tasks/` 保持空，不替用户预建任务目录或 taskIndex.md。
-- 占位文件内容保持精简，明确标注"待补充"，不要塞入与本项目无关的样例内容。
+- `context/standards/` 的内容**直接拷贝** `/Users/aaron/code/roleflow/templates/standards/`，不要手写或改写模板内容；`common-mistakes.md` / `component-index.md` 保持空文件。
+- 其余占位文件（project.md、各 index.md）内容保持精简，明确标注"待补充"，不要塞入与本项目无关的样例内容。
 
 ---
 
 ## 模板：common.md
 
-> 整份写入 `roleflow/context/roles/common.md`（覆盖原型自带版本）。
+> 写入 `roleflow/context/roles/common.md`（实例层公共规范，引用 base/common.md）。
 
 ````
 # 角色公共规范（实例层）
 
-> 角色公共原型：/Users/aaron/code/roleflow/roles/common.md
+> 角色公共原型：/Users/aaron/code/roleflow/roles/base/common.md
 
-本文件统一沉淀**任务级工件命名与存放规范**，所有角色文件不再单独维护这一套规则。
+本文件是本项目对全局原型 `base/common.md` 的实例化补充：项目介绍、输出语言、路径引用规则。**通用的任务级工件命名与存放规范（§1–§10）见 `base/common.md`，本文件不重复。**
 
 ---
 
@@ -159,104 +186,11 @@ done
 
 ---
 
-## 任务级工件存放（适用于所有产出 Markdown 工件的角色）
+## 任务级工件存放（本项目落地）
 
-> 凡是会落盘工件的角色，无论 `ad-hoc` 还是 `workflow` 模式，**默认按本节规则落盘**。
-> 仅当 orchestrator 在 prompt 中显式指定 artifact 路径时，才以其路径为最高优先级。
+通用规范（§1–§10：任务目录、任务ID、工件文件名、角色名→序号映射、taskIndex.md 维护等）见 `/Users/aaron/code/roleflow/roles/base/common.md`。
 
-### 1. 任务目录路径
-
-```
-roleflow/tasks/[版本号]/[任务ID]/
-```
-
-- `[版本号]`：从项目根 `package.json` 的 `version` 字段获取（如 `1.0.0`）
-- `[任务ID]`：见 §2
-
-### 2. 任务ID（[任务ID]）
-
-格式：`[任务序号][任务名驼峰].[版本号]`
-
-| 段 | 规则 |
-|----|------|
-| `[任务序号]` | 2 位数字左补零（`01`…）。取该版本目录下已有序号最大值 + 1；目录不存在或为空则 `01` |
-| `[任务名驼峰]` | 2–5 个英文单词，越少越好，lowerCamelCase，由中文任务名翻译/概括 |
-| `[版本号]` | 同上 |
-
-示例：`01approveList.1.0.0`、`02userProfile.1.0.0`
-
-> 任务ID 的推断 / 确认 / 注册流程由 `/roleflowv2` skill 在加载时一次性完成；角色文件**只在 skill 未介入且会话上下文无任务ID 时**才自行推断。
-
-### 3. 工件文件名
-
-```
-[角色名序号][角色名驼峰][工件序号]-[YYYYMMDD].md
-```
-
-各段连写，段间无分隔符；仅日期前是 `-`。
-
-| 段 | 规则 |
-|----|------|
-| `[角色名序号]` | 3 位数字，见 §4 |
-| `[角色名驼峰]` | kebab 角色名转 lowerCamelCase，见 §4 |
-| `[工件序号]` | 2 位，按「角色 × 任务」独立递增；不同角色互不影响 |
-| `[YYYYMMDD]` | 文件**创建当天**本地日期；后续追加内容不改文件名 |
-
-示例：`300planner01-20260101.md`、`400builder01-20260102.md`
-
-### 4. 角色名 → 序号 / 驼峰 映射表
-
-| kebab 角色名 | 序号 | 驼峰名 |
-|--------------|------|--------|
-| clarifier | `100` | `clarifier` |
-| prd-skeptic | `150` | `prdSkeptic` |
-| explorer | `200` | `explorer` |
-| planner | `300` | `planner` |
-| planner-for-style | `350` | `plannerForStyle` |
-| builder | `400` | `builder` |
-| builder-for-style | `450` | `builderForStyle` |
-| critic | `500` | `critic` |
-| evaluator-for-e2e | `600` | `evaluatorForE2e` |
-| evaluator-for-chrome-ui | `650` | `evaluatorForChromeUi` |
-| test-designer | `700` | `testDesigner` |
-| test-writer | `800` | `testWriter` |
-
-### 5. 附属子目录
-
-角色产出附属内容（截图、链上 JSON、外部文档快照等）时，**子目录名 = 主报告文件名去掉 `.md` 后缀**，与主报告同级存放。
-
-### 6. 工件序号计算（落盘前）
-
-1. `ls roleflow/tasks/[版本号]/[任务ID]/` 取本角色（按 `[角色名序号][角色名驼峰]` 前缀）已存在的工件。
-2. 取其中 `[工件序号]` 最大值 + 1；没有则 `01`。左补零成 2 位。
-
-### 7. 跨角色引用上游工件
-
-到**同一任务目录**按对应 `[角色名序号][角色名驼峰]` 前缀检索；存在多版本时默认取最新（`[工件序号]` 最大者，或文件名内日期最大者）。
-
-### 8. 不属于任务工件的产物
-
-以下按工程惯例落盘，不受本节命名约束：业务源代码、单测、E2E 代码、项目级长期文档（`roleflow/context/...`）。
-
-### 9. 任务目录索引
-
-任务目录 `tasks/[版本号]/[任务ID]/` **不维护 `index.md`**。版本级总索引用 `tasks/[版本号]/taskIndex.md`，见 §10。
-
-### 10. 任务索引（taskIndex.md）维护
-
-每个版本 `roleflow/tasks/[版本号]/taskIndex.md` 作为该版本所有已注册任务的总览，是 `/roleflowv2 switch` 模糊匹配的唯一数据源，**必须与实际任务目录保持一致**。
-
-格式：
-
-```
-# Task Index v[版本号]
-
-| 任务ID | 中文名 | 状态 | 创建日期 | 描述 |
-|---|---|---|---|---|
-| 01approveList.1.0.0 | 授权列表 | active | 2026-01-01 | 首页授权管理 |
-```
-
-注册时机：**当且仅当**推断出一个全新任务ID 时，用户确认后**先写 taskIndex.md，再落任何工件**。文件不存在则先 `mkdir -p` + 写表头（`# Task Index v[版本号]` + 表头行 + 分隔行）再追加任务行；已存在则仅追加，不重排已有行。
+本项目落地：base 里通用的 `roleflow/` 根，在本项目即当前 `roleflow/`（实例层若落在 `docs/.../roleflow/` 等则相应替换）；`[版本号]` 从根目录 `package.json` 的 `version` 读取。
 
 ---
 
@@ -264,7 +198,7 @@ roleflow/tasks/[版本号]/[任务ID]/
 
 - 角色文件正文引用其他文件，一律用**项目根相对路径**（如 `roleflow/context/standards/coding-standards.md`）。
 - 禁止使用 `../` / `./` 类 sibling 相对路径。
-- 全局原型层引用使用绝对路径（`/Users/aaron/code/roleflow/roles/xxx.md`）。
+- 全局原型层引用使用绝对路径（`/Users/aaron/code/roleflow/roles/base/common.md`、`/Users/aaron/code/roleflow/roles/<role>.md`）。
 ````
 
 ---
