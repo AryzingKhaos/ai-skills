@@ -5,7 +5,7 @@ description: "用于统计本机内的 claude code 和 codex 的 token 使用量
 帮我统计最近 4 周的 Claude Code 和 Codex token 使用情况。  
 
 **数据获取：**  
-1. Claude：运行 `npx -y ccusage@latest weekly --json`，需手动将日期**按（上周五～本周四）**聚合为4周数据
+1. Claude：运行 `npx -y ccusage@latest daily --json`，需手动将日期**按（上周五～本周四）**聚合为4周数据
 2. Codex：运行 `npx -y @ccusage/codex daily --json`，该工具没有 weekly 命令，需手动将日期**按（上周五～本周四）**聚合为4周数据
 
 **字段映射（两者结构不同）：**  
