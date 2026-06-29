@@ -54,6 +54,31 @@ def main():
     KEY = {h["id"]: h["name"] for h in heroes}        # id -> npc_dota_hero_x
     ATK = {h["id"]: h.get("attack_type") for h in heroes}
 
+    # 物品映射（用于"首个大件"诊断——看每个核心贪 farm 还是打架取向）
+    try:
+        items_const = get(f"{API}/constants/items")
+    except Exception:
+        items_const = {}
+    IDNAME = {k: (v.get("dname") or k) for k, v in items_const.items() if isinstance(v, dict)}
+    # 诊断用"首个大件"白名单：玩家常裸/首出的成品大件
+    BIG_ITEMS = {
+        "radiance","battle_fury","maelstrom","mjollnir","manta","sange_and_yasha","yasha_and_kaya",
+        "kaya_and_sange","echo_sabre","harpoon","desolator","black_king_bar","blink","armlet",
+        "mask_of_madness","vanguard","crimson_guard","hand_of_midas","dragon_lance","hurricane_pike",
+        "diffusal_blade","orchid","bloodthorn","witch_blade","rod_of_atos","gungir","force_staff",
+        "glimmer_cape","aether_lens","guardian_greaves","mekansm","pipe","solar_crest","vladmir",
+        "eternal_shroud","kaya","phylactery","falcon_blade","helm_of_the_dominator","helm_of_the_overlord",
+        "octarine_core","shivas_guard","assault","heart","satanic","abyssal_blade","skull_basher",
+        "eye_of_skadi","butterfly","greater_crit","monkey_king_bar","silver_edge","ultimate_scepter",
+        "aghanims_shard","cyclone","meteor_hammer","spirit_vessel","veil_of_discord","lotus_orb",
+        "blade_mail","heavens_halberd","sheepstick","wraith_pact","khanda","disperser","parasma",
+    }
+    def first_big(p):
+        for e in (p.get("purchase_log") or []):
+            if e.get("key") in BIG_ITEMS:
+                return IDNAME.get(e["key"], e["key"]), e["time"]
+        return None, None
+
     # 触发解析 + 轮询
     parsed = False; m = None
     try:
@@ -114,9 +139,28 @@ def main():
         me_tag = "**←你**" if p.get("account_id") == acct else ""
         P(f"| {side} | {LOC.get(p['hero_id'],'?')} | {lane_name(p.get('lane_role'))}{'游' if p.get('is_roaming') else ''} | {p['kills']}/{p['deaths']}/{p['assists']} | {p.get('net_worth')} | {p['gold_per_min']} | {p.get('hero_damage')} | {me_tag} |")
 
+    # ---------- 3b 双方首个大件（看贪 farm / 打架取向；判断队友出装是否拖累你） ----------
+    first_big_sig = {"team": [], "enemy": []}
+    if parsed and any(p.get("purchase_log") for p in players):
+        P("")
+        P("## 3b. 双方首个大件（看贪 farm/打架取向；用于判断队友出装是否拖累了你的 farm/参团）")
+        for label, key, is_team in (("你方", "team", True), ("敌方", "enemy", False)):
+            parts = []
+            for p in players:
+                if ((p["player_slot"] < 128) == rad) != is_team: continue
+                nm, t = first_big(p)
+                tag = "(你)" if p.get("account_id") == acct else ""
+                parts.append(f"{LOC.get(p['hero_id'],'?')}{tag} {nm}@{mmss(t)}" if nm else f"{LOC.get(p['hero_id'],'?')}{tag} 无大件")
+                first_big_sig[key].append({"hero": LOC.get(p['hero_id']), "item": nm,
+                                           "min": round((t or 0)/60, 1) if nm else None,
+                                           "me": p.get("account_id") == acct})
+            P(f"- {label}：" + " / ".join(parts))
+        P("> 看点：你方核心若**裸贪 farm 大件（如双辉耀/漩涡/狂战）打进对面打架阵容**，会逼你这个中单放弃 farm 去单扛打架——此时你 farm 低/助攻低是**被迫的**，别算你头上。")
+
     signals = {"parsed": parsed, "won": won, "hero": myhero, "duration_min": round(dur/60,1),
                "kda": [me['kills'], me['deaths'], me['assists']],
-               "benchmarks": {k: round(b[k]['pct']*100) for k in b if b.get(k)} if b else {}}
+               "benchmarks": {k: round(b[k]['pct']*100) for k in b if b.get(k)} if b else {},
+               "first_big_items": first_big_sig}
 
     if parsed:
         # ---------- 对线 ----------
