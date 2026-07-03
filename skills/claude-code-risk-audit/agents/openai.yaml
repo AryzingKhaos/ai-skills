@@ -1,0 +1,4 @@
+interface:
+  display_name: "Claude Code Risk Audit"
+  short_description: "Audit local Claude Code environment risk markers."
+  default_prompt: "Use this skill to audit whether the current machine has Claude Code account-risk environment markers."
