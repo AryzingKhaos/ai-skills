@@ -1,6 +1,6 @@
 ---
 name: roleflowv2
-description: "角色加载器 v2。通过 /roleflowv2 <角色名> [任务名称] 一次完成加载角色定义、解析任务ID、定位工件目录三件事；通过 /roleflowv2 switch <任务名> 在会话内切换到另一个已注册任务（保留当前角色）；通过 /roleflowv2 init 在当前目录脚手架出 roleflow(v2) 骨架（仅 context + tasks 两层，tasks 留空，roles 从全局原型层拷入）。switch 与 init 两个子命令的完整流程分别放在 skill 目录的 switch.md / init.md，仅在实际调用该子命令时才读取。角色文件按优先级查找：当前项目的 `roleflow/context/roles/` → `docs/link-ai-prompt/roleflow/context/roles/` → `.vscode/link-ai-prompt/roleflow/context/roles/` → `docs/roleflow/context/roles/` → `.vscode/roleflow/context/roles/`，全部不存在时回退到全局原型库 `/Users/aaron/code/roleflow/roles/`。命中第一个存在的目录即停止，不合并。强制精确匹配角色文件名（不含 `.md` 后缀），拒绝模糊匹配。任务ID 格式 `[2位序号][lowerCamelCase任务名].[版本号]`（如 `01approveList.4.10.0`）；版本号默认从 package.json 读，任务名内带 semver 时以任务名为准。工件目录路径 `tasks/[版本号]/[任务ID]/` 跟随生效角色目录的根选。每个版本维护一份 `tasks/[版本号]/taskIndex.md` 任务索引，新建任务时自动注册。switch 关键字必须字面精确匹配；其后任务名走 taskIndex.md 子串模糊匹配，多命中时让用户选。触发场景：'/roleflowv2 builder 审批列表'、'/roleflowv2 planner approveList'、'/roleflowv2 critic 01approveList.4.10.0'、'/roleflowv2 chat'（无任务名时回退查询最近任务）、'/roleflowv2 switch 授权列表'、'切换到 critic'、'/roleflowv2 init'、'初始化 roleflow 骨架'。"
+description: "角色加载器 v2。/roleflowv2 <角色名> [任务名称]：一次完成加载角色定义、解析任务ID、定位工件目录三件事；/roleflowv2 switch <任务名>：会话内切换到另一个已注册任务（保留当前角色）；/roleflowv2 init：在当前目录脚手架 roleflow(v2) 骨架。角色名强制精确匹配、拒绝模糊匹配；角色目录查找优先级、任务ID 格式、taskIndex 注册与 switch 匹配规则等细节见正文；switch/init 子命令流程在 switch.md / init.md，仅实际调用时读取。触发场景：'/roleflowv2 builder 审批列表'、'/roleflowv2 planner approveList'、'/roleflowv2 chat'（无任务名回退最近任务）、'/roleflowv2 switch 授权列表'、'切换到 critic'、'/roleflowv2 init'、'初始化 roleflow 骨架'。"
 ---
 
 # Roleflowv2 角色加载器
@@ -150,7 +150,7 @@ description: "角色加载器 v2。通过 /roleflowv2 <角色名> [任务名称]
 3. **新建任务ID**：
    - 读 `tasks/[版本号]/` 下所有目录名，提取前缀 `\d{2}`，取最大值 + 1，左侧补零成 2 位 → `[任务序号]`。目录不存在或为空，则 `01`。
    - 拼接：`[任务序号][lowerCamelCaseName].[版本号]`。
-   - **新建后必须立刻注册到 `tasks/[版本号]/taskIndex.md`**（追加一行；文件不存在则创建表头）。注册时机、字段、格式见公共规范 `docs/link-ai-prompt/roleflow/context/roles/common.md` §10。Agent 须在 §确认 步骤里同时把"将注册到 taskIndex.md"念给用户。
+   - **新建后必须立刻注册到 `tasks/[版本号]/taskIndex.md`**（追加一行；文件不存在则创建表头）。注册时机、字段、格式见角色公共原型 `/Users/aaron/code/roleflow/roles/base/common.md` §10（生效角色目录的 `common.md` 如有项目补充，一并遵循）。Agent 须在 §确认 步骤里同时把"将注册到 taskIndex.md"念给用户。
 
 ##### §确认（统一确认 UX）
 
@@ -211,7 +211,7 @@ description: "角色加载器 v2。通过 /roleflowv2 <角色名> [任务名称]
 ### Step 7: 加载并应用角色
 
 1. 用 `Read` 工具读取角色文件 `<选定目录>/<角色名>.md` 的完整内容。
-2. 同时检查并读取 `<选定目录>/common.md`（如果存在）—— 它是所有角色共享的基础协作原则，必须叠加到当前角色之上。
+2. 同时检查并读取 `<选定目录>/common.md`（如果存在）—— 它是所有角色共享的基础协作原则，必须叠加到当前角色之上。若该文件不存在（如命中全局原型层），改读 `<选定目录>/base/common.md`（全局原型层的公共规范位于 `base/` 子目录）。
 3. 向用户输出**简短确认**（不超过 5 行），格式如下：
 
    ```
