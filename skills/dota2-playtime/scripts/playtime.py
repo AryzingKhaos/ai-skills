@@ -18,13 +18,82 @@ dota2-playtime · 统计某账号 Dota2 的【真实消耗时间】+【健康预
                         [--mmr 当前真实分] [--target-mmr 5000] [--mmr-per-game 25] [--out PATH]
     不带 --days → 当前自然周；带 --days N → 过去 N 天（截止昨天 24:00，不含今天）。
 """
-import sys, json, argparse, datetime, urllib.request, urllib.error
+import sys, os, re, json, argparse, datetime, urllib.request, urllib.error
 
 API = "https://api.opendota.com/api"
 DEFAULT_ACCOUNT = 137084212
 H = 3600
-# 预算阈值（秒）
-REC_LOW, REC_BASE, WARN, SEVERE, CAP = 8 * H, 10 * H, 10 * H, 12 * H, 15 * H
+# 预算档位以「当周红线上限 cap」为基准按比例缩放。
+# cap 默认 15h；台账当周自设「本周时限」则优先用它（--cap-hours 再优先）。
+# 比例锚定：cap=15h 时复现原档位（推荐下限 8h / 基准 10h / 严重 12h / 红线 15h）。
+DEFAULT_CAP_H = 15.0
+LOW_R, BASE_R, SEVERE_R = 8.0 / 15, 10.0 / 15, 12.0 / 15
+DEFAULT_LEDGER = "/Users/aaron/workspace/个人/生活/DOTA2时长.md"
+
+def read_ledger_cap(path, monday_date):
+    """从台账读当周（按周一日期前缀匹配「自然周」列）的「本周时限」小时数；无则 None。"""
+    if not path or not os.path.exists(path):
+        return None
+    prefix = monday_date.isoformat()
+    try:
+        with open(path, encoding="utf-8") as f:
+            for line in f:
+                s = line.strip()
+                if not s.startswith("|"):
+                    continue
+                cells = [c.strip() for c in s.strip("|").split("|")]
+                if len(cells) < 5 or not cells[0].startswith(prefix):
+                    continue
+                m = re.search(r"(\d+(?:\.\d+)?)\s*[hH]", cells[4])   # 第5列=本周时限，如 "15h"
+                if m:
+                    return float(m.group(1))
+    except Exception:
+        return None
+    return None
+
+def parse_hm_seconds(s):
+    """解析 'XhYm' / 'Xh' / '-XhYm'(负结余=透支) 为秒；解析不了返回 None（'—'/'待结算' 等自然跳过）。"""
+    m = re.search(r"(-|−)?\s*(\d+)\s*[hH](?:\s*(\d+)\s*[mM])?", s)
+    if not m:
+        return None
+    sec = int(m.group(2)) * 3600 + int(m.group(3) or 0) * 60
+    return -sec if m.group(1) else sec
+
+def read_ledger_balance(path, monday_date):
+    """从台账读可用结余（秒）：「当前结余量」列（第7列）中，周一日期早于本周、
+    且值可解析（如 2h53m）的**最近**一行。结余规则 2026-06-22 生效，此前行为「—」自然跳过。"""
+    if not path or not os.path.exists(path):
+        return None
+    best_date, best_val = None, None
+    try:
+        with open(path, encoding="utf-8") as f:
+            for line in f:
+                s = line.strip()
+                if not s.startswith("|"):
+                    continue
+                cells = [c.strip() for c in s.strip("|").split("|")]
+                if len(cells) < 7:
+                    continue
+                m = re.match(r"(\d{4}-\d{2}-\d{2})", cells[0])
+                if not m:
+                    continue
+                try:
+                    wk = datetime.date.fromisoformat(m.group(1))
+                except ValueError:
+                    continue
+                if wk >= monday_date:
+                    continue
+                sec = parse_hm_seconds(cells[6])
+                if sec is None:
+                    continue
+                if best_date is None or wk > best_date:
+                    best_date, best_val = wk, sec
+    except Exception:
+        return None
+    return best_val
+
+def fmt_h(x):
+    return ("%d" % round(x)) if abs(x - round(x)) < 0.05 else ("%.1f" % x)
 
 def get(url, timeout=30):
     req = urllib.request.Request(url, headers={"User-Agent": "dota2-playtime/1.0"})
@@ -72,6 +141,11 @@ def main():
     ap.add_argument("--mmr", type=int, default=None, help="你的当前真实天梯分(手填则精确算距5000的差距与本窗口上下分)")
     ap.add_argument("--target-mmr", type=int, default=5000, dest="target_mmr")
     ap.add_argument("--mmr-per-game", type=int, default=25, dest="mmr_per_game", help="每局天梯胜负约±多少分(估算用)")
+    ap.add_argument("--cap-hours", type=float, default=None, dest="cap_hours",
+                    help="本周红线上限(小时)；覆盖台账/默认。各档位按此值比例缩放")
+    ap.add_argument("--ledger", default=DEFAULT_LEDGER, help="时长台账路径(自然周模式下读当周自设「本周时限」与「当前结余量」)")
+    ap.add_argument("--balance-hours", type=float, default=None, dest="balance_hours",
+                    help="手动指定可用结余(小时)；默认自然周模式从台账读最近已结算「当前结余量」")
     ap.add_argument("--out", default=None)
     a = ap.parse_args()
 
@@ -90,6 +164,32 @@ def main():
         elapsed_days = a.days
     ws, we = window_start.timestamp(), window_end.timestamp()
     tzname = now.tzname() or ""
+
+    # ---- 本周时限（优先级：--cap-hours > 台账当周自设「本周时限」> 默认15h）----
+    cap_source = "default"; cap_hours = None
+    if a.cap_hours is not None:
+        cap_hours, cap_source = a.cap_hours, "arg"
+    elif a.days is None:                      # 仅自然周模式读台账当周设定
+        lc = read_ledger_cap(a.ledger, window_start.date())
+        if lc is not None:
+            cap_hours, cap_source = lc, "ledger"
+    if cap_hours is None:
+        cap_hours = DEFAULT_CAP_H
+    # 各档位（秒）按本周时限比例缩放
+    low_h, base_h, severe_h = cap_hours * LOW_R, cap_hours * BASE_R, cap_hours * SEVERE_R
+    low_s, base_s, warn_s, severe_s, cap_s = low_h * H, base_h * H, base_h * H, severe_h * H, cap_hours * H
+
+    # ---- 可用结余 + 超限红线 = 本周时限 + 结余（2026-06-22 结余规则）----
+    # 优先级：--balance-hours > 台账「当前结余量」（仅自然周模式）> 0
+    bal_source = "none"; bal_s = 0.0
+    if a.balance_hours is not None:
+        bal_s, bal_source = a.balance_hours * H, "arg"
+    elif a.days is None:
+        lb = read_ledger_balance(a.ledger, window_start.date())
+        if lb is not None:
+            bal_s, bal_source = float(lb), "ledger"
+    hard_s = cap_s + bal_s
+    hard_h = hard_s / H
 
     # ---- 拉对局 ----
     try:
@@ -131,19 +231,39 @@ def main():
             if won: rwin += 1
             else: rloss += 1
 
-    # ---- 预算评判（针对真实消耗时间）----
-    if real_total >= CAP:
-        status = "🛑 **强制停玩**：本周真实消耗已超 15 小时红线 —— 必须停玩一周！"
-    elif real_total >= SEVERE:
-        status = "🚨 **严重警告**：已超 12 小时，远超推荐，请立刻收手，离 15 小时强制红线很近了。"
-    elif real_total >= WARN:
-        status = "⚠️ **警告**：已超 10 小时推荐基准，建议本周别再多打。"
-    elif real_total >= REC_LOW:
-        status = "✅ 接近推荐上限（8–10 小时区间内），可以再来一两把就收。"
+    # ---- 预算评判 ----
+    # 主判据 = 「时限 + 结余」超限阶梯（唯一决定状态 emoji）：
+    #   x>红线+5h → 🛑；x>红线+2h → 🚨；x>红线 → ⛔；时限<x≤红线 → 💰；x≤时限 → ✅
+    # ✅ 内部再按接近推荐基准/时限的程度给不同措辞——但 emoji 一律 ✅，绝不在未超红线时误报 🚨/⚠️。
+    cap_tag = "（当周自设）" if cap_source == "ledger" else ("（命令行设定）" if cap_source == "arg" else "")
+    over_hard = real_total - hard_s   # 超出「时限+结余」红线的量
+    if over_hard >= 5 * H:
+        status = "🛑 **触发下周强制停玩**：已超「时限+结余」超限红线 **%s**（≥5h）—— 下一周强制停玩一周（停玩周的时限照常计入结余）；超出部分记为**负结余（透支）**。" \
+                 % fmt_dur(over_hard)
+    elif over_hard >= 2 * H:
+        status = "🚨 **强烈警告**：已超「时限+结余」超限红线 **%s**（≥2h），超出部分记为**负结余（透支）**；超到 5h 将触发下周强制停玩。" \
+                 % fmt_dur(over_hard)
+    elif over_hard >= 0:
+        status = "⛔ **超限警告**：已超「时限+结余」超限红线 **%s**，超出部分记为**负结余（透支惩罚）**；超 2h 强烈警告、超 5h 下周强制停玩。" \
+                 % fmt_dur(over_hard)
+    elif real_total > cap_s:
+        # 时限 < 消耗 ≤ 红线：合法动用结余（此分支仅当 bal_s>0 才可达）
+        status = "💰 **动用结余中**：已超本周时限 %sh%s，超出的 %s 由结余支付（合法消耗）；结余还可支付 %s，之后才进入透支惩罚区。" \
+                 % (fmt_h(cap_hours), cap_tag, fmt_dur(real_total - cap_s), fmt_dur(hard_s - real_total))
     else:
-        status = "✅ 健康范围（未到 8 小时推荐区间下限），还很充裕。"
-    rem_base = REC_BASE - real_total   # 距 10h 推荐基准
-    rem_cap = CAP - real_total         # 距 15h 强制红线
+        # 消耗 ≤ 本周时限 → 一律 ✅（既未超时限、更远未及红线）；按接近程度给措辞，emoji 不变
+        if real_total >= severe_s:
+            status = "✅ **未超本周时限**（更远未及超限红线），但已进入高消耗区：超推荐基准 %s、距时限仅剩 %s，建议见好就收。" \
+                     % (fmt_dur(real_total - base_s), fmt_dur(cap_s - real_total))
+        elif real_total >= warn_s:
+            status = "✅ 未超本周时限，已过推荐基准 %s，建议本周别再多打。" % fmt_dur(real_total - base_s)
+        elif real_total >= low_s:
+            status = "✅ 接近推荐上限（%s–%sh 区间内），可以再来一两把就收。" % (fmt_h(low_h), fmt_h(base_h))
+        else:
+            status = "✅ 健康范围（未到 %sh 推荐区间下限），还很充裕。" % fmt_h(low_h)
+    rem_base = base_s - real_total   # 距 推荐基准
+    rem_cap = cap_s - real_total     # 距 本周时限
+    rem_hard = hard_s - real_total   # 距 超限红线（时限+结余）
 
     # ---- 天梯上下分 ----
     base_mmr = a.mmr if a.mmr is not None else rank_tier_to_mmr(rank_tier)
@@ -167,13 +287,28 @@ def main():
     P("- 🎮 **真实消耗时间：%s**（共 %d 局，日均 %s）" % (fmt_dur(real_total), n, fmt_dur(real_total / max(elapsed_days, 1))))
     P("- %s" % status)
     if rem_base > 0:
-        P("- 距 **10 小时推荐基准**还可玩 **%s**（仍在推荐范围内）。" % fmt_dur(rem_base))
+        P("- 距 **%s 小时推荐基准**还可玩 **%s**（仍在推荐范围内）。" % (fmt_h(base_h), fmt_dur(rem_base)))
     else:
-        P("- 已超 10 小时推荐基准 **%s**。" % fmt_dur(-rem_base))
+        P("- 已超 %s 小时推荐基准 **%s**。" % (fmt_h(base_h), fmt_dur(-rem_base)))
+    cap_name = "当周自设时限" if cap_source == "ledger" else ("命令行时限" if cap_source == "arg" else "默认时限")
     if rem_cap > 0:
-        P("- 距 **15 小时强制红线**还剩 **%s**。" % fmt_dur(rem_cap))
+        P("- 距 **%s 小时%s**还剩 **%s**。" % (fmt_h(cap_hours), cap_name, fmt_dur(rem_cap)))
     else:
-        P("- 已超 15 小时强制红线 **%s** —— 本周请停玩。" % fmt_dur(-rem_cap))
+        P("- 已超 %s 小时%s **%s**。" % (fmt_h(cap_hours), cap_name, fmt_dur(-rem_cap)))
+    bal_name = {"ledger": "台账结余", "arg": "命令行结余"}.get(bal_source)
+    bal_disp = ("-" if bal_s < 0 else "") + fmt_dur(abs(bal_s))
+    if bal_name:
+        if bal_s < 0:
+            P("- ⚠️ 可用结余为**负（负债 %s，%s，上周透支）** → **本周可用总量 = 时限 − 负债 = %s 小时（超限红线）**。"
+              % (fmt_dur(-bal_s), bal_name, fmt_h(hard_h)))
+        else:
+            P("- 可用结余 **%s**（%s）→ **本周可用总量 %s 小时（超限红线）**。" % (bal_disp, bal_name, fmt_h(hard_h)))
+        if rem_hard > 0:
+            P("- 距超限红线还剩 **%s**。" % fmt_dur(rem_hard))
+        else:
+            P("- 已超超限红线 **%s**，超出部分将计为负结余（透支）；超 2h 🚨、超 5h 🛑 下周强制停玩。" % fmt_dur(-rem_hard))
+    elif rem_hard <= 0:
+        P("- 无可用结余，已超超限红线 **%s**，超出部分将计为负结余（透支）；超 2h 🚨、超 5h 🛑 下周强制停玩。" % fmt_dur(-rem_hard))
     P("")
     P("| 时长构成 | 口径 | 时长 |")
     P("|---|---|---|")
@@ -182,7 +317,8 @@ def main():
     P("| 匹配/赛后等 | %d 局 × %d 秒 | %s |" % (n, a.overhead_seconds, fmt_dur(oh_total)))
     P("| **真实消耗** | 三项之和 | **%s** |" % fmt_dur(real_total))
     P("")
-    P("> 预算口径：推荐 8–10h／基准 10h／警告 >10h／严重 >12h／强制停玩 >15h（按自然周、针对真实消耗时间）。")
+    P("> 预算口径：**时限内（≤%sh 时限%s）一律 ✅**（推荐下限 %sh／基准 %sh 仅作『接近程度』提示，不触发警告 emoji）；**超限红线 = 时限 + 可用结余 = %sh**——超时限但在结余内 = 💰 合法动用结余；**超红线 ⛔ 透支、超红线+2h 🚨 强烈警告、超红线+5h 🛑 下周强制停玩**（停玩周时限照常入结余）。针对真实消耗时间。"
+      % (fmt_h(cap_hours), cap_tag, fmt_h(low_h), fmt_h(base_h), fmt_h(hard_h)))
 
     # 天梯进度
     P("")
@@ -231,9 +367,19 @@ def main():
         "pick_seconds": a.pick_seconds, "overhead_seconds": a.overhead_seconds,
         "pure_game_seconds": total, "real_total_seconds": real_total, "real_total_human": fmt_dur(real_total),
         "budget": {
-            "rec_hours": [8, 10], "warn_h": 10, "severe_h": 12, "cap_h": 15,
-            "over_10h": real_total >= WARN, "over_12h": real_total >= SEVERE, "over_15h_force_stop": real_total >= CAP,
-            "remaining_to_10h_seconds": rem_base, "remaining_to_15h_seconds": rem_cap,
+            "cap_hours": cap_hours, "cap_source": cap_source,
+            "rec_low_h": round(low_h, 2), "rec_base_h": round(base_h, 2), "warn_h": round(base_h, 2),
+            "severe_h": round(severe_h, 2), "cap_h": cap_hours,
+            "balance_seconds": int(bal_s), "balance_human": bal_disp, "balance_source": bal_source,
+            "hard_cap_hours": round(hard_h, 2),
+            "over_base": real_total >= warn_s, "over_severe": real_total >= severe_s,
+            "over_limit_using_balance": real_total >= cap_s and bal_s > 0 and real_total < hard_s,
+            "over_hard_cap": over_hard >= 0,
+            "over_hard_severe": over_hard >= 2 * H,
+            "forced_stop_next_week": over_hard >= 5 * H,
+            "over_cap_force_stop": over_hard >= 5 * H,
+            "remaining_to_base_seconds": rem_base, "remaining_to_cap_seconds": rem_cap,
+            "remaining_to_hard_cap_seconds": rem_hard,
         },
         "ladder": {
             "target_mmr": a.target_mmr, "current_mmr_estimate": base_mmr, "mmr_is_estimate": mmr_is_estimate,
