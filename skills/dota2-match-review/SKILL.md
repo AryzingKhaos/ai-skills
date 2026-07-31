@@ -29,7 +29,7 @@ description: "对一局 Dota2 对局做【单局数据复盘】，固定复盘�
 |---|---|---|
 | 对局（必填） | 可以是**纯数字 match_id**（如 `8859827264`），**也可以是自然语言指代**（如『最近的那局幽鬼』『倒数第二近的混沌骑士』『最近一场』『上一把宙斯』）——后者由你按第 0 步解析成 match_id | — |
 | account | 要复盘的账号 Steam32 ID | **137084212**（一般不用改） |
-| 输出目录 | 报告 `.md` 存哪 | **`/Users/aaron/code/aiagent-study-self/resources/dota2/`** |
+| 输出目录 | 报告 `.md` 存哪 | **`/Users/aaron/code/aiagent-study-self/resources/dota2/复盘/`** |
 
 缺 match_id 就问用户要，别瞎编。
 
@@ -65,7 +65,7 @@ description: "对一局 Dota2 对局做【单局数据复盘】，固定复盘�
 ### 1. 跑脚本取数（确定性，别手算）
 
 ```bash
-python3 scripts/fetch_match.py <match_id> --out /Users/aaron/code/aiagent-study-self/resources/dota2/_review_<match_id>.md
+python3 scripts/fetch_match.py <match_id> --out /Users/aaron/code/aiagent-study-self/resources/dota2/复盘/_review_<match_id>.md
 ```
 
 - 脚本会**自动触发解析并轮询**到完成（通常 30 秒–3 分钟）。耗时较长，**建议后台运行**（`run_in_background`）或耐心等待；轮询内部用 python `time.sleep`，不要在 bash 里写 `sleep`。
@@ -75,7 +75,7 @@ python3 scripts/fetch_match.py <match_id> --out /Users/aaron/code/aiagent-study-
 ### 1b. （可选，推荐）跑 STRATZ 增强取数 → 追加"第 10 节 STRATZ 评价"
 
 ```bash
-python3 scripts/fetch_stratz.py <match_id> --append /Users/aaron/code/aiagent-study-self/resources/dota2/_review_<match_id>.md
+python3 scripts/fetch_stratz.py <match_id> --append /Users/aaron/code/aiagent-study-self/resources/dota2/复盘/_review_<match_id>.md
 ```
 
 - 只取 OpenDota **没有**的增量：**IMP**（每局每人表现分，正=拉高赢面/负=拖累，按英雄/分路/位置/段位/时长归一）、**对线胜负判定**(win/lose/draw/stomp)、**奖章**、**位置识别**。会把"## 10. STRATZ 评价"+ 一段 `stratz` 信号 JSON 追加到上面那张数据卡末尾。
@@ -86,7 +86,7 @@ python3 scripts/fetch_stratz.py <match_id> --append /Users/aaron/code/aiagent-st
 ### 1c. （可选，推荐）跑英雄相性取数 → 追加"第 11 节 英雄相性"
 
 ```bash
-python3 scripts/fetch_matchups.py <match_id> --append /Users/aaron/code/aiagent-study-self/resources/dota2/_review_<match_id>.md
+python3 scripts/fetch_matchups.py <match_id> --append /Users/aaron/code/aiagent-study-self/resources/dota2/复盘/_review_<match_id>.md
 ```
 
 - 针对**你这局所用英雄**，拉它与在场其它英雄的**历史胜负相性**（大样本先验，非本局数据）：
@@ -99,7 +99,7 @@ python3 scripts/fetch_matchups.py <match_id> --append /Users/aaron/code/aiagent-
 ### 1d. （可选，推荐）跑跨局趋势 → 追加"第 12 节 近况趋势"
 
 ```bash
-python3 scripts/fetch_trend.py --append /Users/aaron/code/aiagent-study-self/resources/dota2/_review_<match_id>.md
+python3 scripts/fetch_trend.py --append /Users/aaron/code/aiagent-study-self/resources/dota2/复盘/_review_<match_id>.md
 ```
 
 - **不带 match_id**（看的是账号近况，不是某一局）：拉最近 N 局（默认 20，`--last` 可调），算**近 N 局胜率、当前连胜/连败、最长连败、专坑英雄(≥3局胜率≤34%)/本命英雄(≥3局胜率≥60%)、上头(tilt)检测**。
