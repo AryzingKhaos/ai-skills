@@ -1,6 +1,6 @@
 ---
 name: roleflow
-description: "角色加载器。通过 /roleflow [角色名] 加载指定角色的协作规范，让 Claude 按照该角色的职责、行为约束和工作流执行后续任务。角色定义文件按优先级查找：当前项目的 `roleflow/context/roles/` → `docs/link-ai-prompt/roleflow/context/roles/` → `.vscode/link-ai-prompt/roleflow/context/roles/` → `docs/roleflow/context/roles/` → `.vscode/roleflow/context/roles/`，全部不存在时回退到全局原型库 `/Users/aaron/code/roleflow/roles/`。命中第一个存在的目录即停止，不合并。强制精确匹配角色文件名（不含 `.md` 后缀），拒绝模糊匹配；找不到时列出可用角色让用户重新选择。触发场景：'/roleflow builder'、'/roleflow planner'、'/roleflow chat'、'加载 explorer 角色'、'切换到 critic'。"
+description: "角色加载器。通过 /roleflow [角色名] 加载指定角色的协作规范，让 Claude 按照该角色的职责、行为约束和工作流执行后续任务。角色定义文件按优先级查找：当前项目的 `roleflow/context/roles/` → `docs/link-ai-prompt/roleflow/context/roles/` → `.vscode/link-ai-prompt/roleflow/context/roles/` → `docs/roleflow/context/roles/` → `.vscode/roleflow/context/roles/`，全部不存在时回退到全局原型库 `/Users/aaron/code/roleflow/roles/`。命中第一个存在的目录即停止，不合并。强制精确匹配角色文件名（不含 `.md` 后缀），拒绝模糊匹配；找不到时列出可用角色让用户重新选择。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户说『加载 explorer 角色』『切换到 critic』这类没点名 skill 的话都不算。显式调用形式：'/roleflow builder'、'/roleflow planner'、'/roleflow chat'、'用 roleflow 加载 explorer 角色'。"
 ---
 
 # Roleflow 角色加载器

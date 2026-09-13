@@ -1,6 +1,6 @@
 ---
 name: claude-code-risk-audit
-description: "Audit the current machine for Claude Code account-risk environment markers. Use when the user asks whether the current Claude Code/Anthropic environment could cause account suspension, ban risk, region-risk, China timezone risk, China/Hong Kong/Macau outbound IP risk, ANTHROPIC_BASE_URL risk, Chinese AI lab endpoint risk, proxy residue, macOS Location Services risk, or Claude/Anthropic configuration residue."
+description: "Audit the current machine for Claude Code account-risk environment markers that could cause account suspension or ban risk: region risk, China timezone risk, China/Hong Kong/Macau outbound IP risk, ANTHROPIC_BASE_URL risk, Chinese AI lab endpoint risk, proxy residue, macOS Location Services risk, and Claude/Anthropic configuration residue. **只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户只是聊封号风险、随口问『我这环境会不会被封』都不算。显式调用形式：'/claude-code-risk-audit'、'用 claude-code-risk-audit 检查一下当前环境'、'调用 claude-code-risk-audit'。"
 ---
 
 # Claude Code Risk Audit

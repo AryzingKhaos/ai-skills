@@ -25,7 +25,7 @@ description: "在动手实现之前，先把模糊的想法通过协作式对话
 6. **写设计文档**：保存到 `docs/specs/YYYY-MM-DD-<topic>-design.md`（如用户有偏好路径以用户为准）并提交
 7. **自审 spec**：扫占位符、前后矛盾、范围是否聚焦、歧义；直接内联修
 8. **请用户审阅 spec**：等待批准
-9. **交棒**：进入实现规划阶段（如有 writing-plans / orchestrator 之类的实现 skill，调用它）
+9. **交棒**：进入实现规划阶段（如有 writing-plans / roleflow-orchestrator 之类的实现 skill，调用它）
 
 ## 提问的姿势
 

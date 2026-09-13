@@ -3,7 +3,8 @@
 """work-time 手动打卡子命令：start / end / endTime。
 
 定位：记录**自动推算（对话记录）抓不到的工作**——看书、开会、线下写代码、纯思考。
-与自动推算互补，各记各的、不重叠。手动段是**精确起止**，不加准备/阅读补偿。
+与自动推算互补，各记各的、不重叠。手动段是**精确起止**，不加准备/阅读补偿，
+完成后统一计入 planB项目。
 
 进行中状态存 STATE 文件（同目录 .state.json）。end/endTime 时配对写入台账的
 「手动打卡明细」表，然后清空状态。
@@ -20,6 +21,9 @@ import os
 import sys
 import json
 import datetime
+from pathlib import Path
+
+import work_time
 
 STATE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".manual_clock_state.json")
 LEDGER = "/Users/aaron/workspace/个人/生活/工作时长.md"
@@ -111,14 +115,21 @@ def do_start(content):
 
 def _write_ledger(start_dt, end_dt, content, note=""):
     dur = end_dt - start_dt
-    row = "| %s | %s | %s | %s | %s | %s |" % (
-        fmt_date_wd(start_dt), start_dt.strftime("%H:%M"), end_dt.strftime("%H:%M"),
-        fmt_dur(dur.total_seconds()), content or "", note)
+    row_cells = [
+        fmt_date_wd(start_dt),
+        start_dt.strftime("%H:%M"),
+        end_dt.strftime("%H:%M"),
+        fmt_dur(dur.total_seconds()),
+        content or "",
+        note,
+    ]
+    row = work_time.md_row(row_cells)
     if not os.path.exists(LEDGER):
         text = "# 工作时长台账\n\n"
     else:
         with open(LEDGER, encoding="utf-8") as f:
             text = f.read()
+    text = work_time.add_manual_row_to_weekly(text, row_cells)
     if MANUAL_HEADER in text:
         # 在该表最后一行后追加：定位到 header，找到其表格块末尾插入
         idx = text.index(MANUAL_HEADER)
@@ -131,8 +142,7 @@ def _write_ledger(start_dt, end_dt, content, note=""):
     else:
         # 新建表，放文件末尾
         text = text.rstrip() + "\n\n" + MANUAL_HEADER + "\n\n" + MANUAL_COLS + "\n" + MANUAL_SEP + "\n" + row + "\n"
-    with open(LEDGER, "w", encoding="utf-8") as f:
-        f.write(text)
+    work_time.atomic_write(Path(LEDGER), lambda handle: handle.write(text))
     return dur
 
 
@@ -149,7 +159,7 @@ def _finish(end_dt, content_override):
     content = content_override if content_override else st.get("content", "")
     dur = _write_ledger(start_dt, end_dt, content)
     clear_state()
-    print("⏹️ 已结束打卡并记入台账：")
+    print("⏹️ 已结束打卡并计入 planB项目：")
     print("   %s  %s → %s  用时 %s" % (
         fmt_date_wd(start_dt), start_dt.strftime("%H:%M"), end_dt.strftime("%H:%M"), fmt_dur(dur.total_seconds())))
     if content:

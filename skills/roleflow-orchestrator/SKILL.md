@@ -1,9 +1,9 @@
 ---
-name: orchestrator
-description: "工作流编排器。通过 /orchestrator <工作流名> <任务描述> 启动多角色 subagent 编排，支持 continue（续跑）/ rerun（重跑）/ status（查询）/ 不带参（列出可用工作流）。触发场景：'/orchestrator feature-medium 加个 dapp 超时提示'、'/orchestrator continue 2026-05-22-dapp-connection'、'/orchestrator rerun <task-id>'、'/orchestrator status <task-id>'、'/orchestrator'（列出工作流）、'启动工作流'、'用 onchain-feature 跑这个任务'。"
+name: roleflow-orchestrator
+description: "工作流编排器。通过 /roleflow-orchestrator <工作流名> <任务描述> 启动多角色 subagent 编排，支持 continue（续跑）/ rerun（重跑）/ status（查询）/ 不带参（列出可用工作流）。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户说『启动工作流』『用 onchain-feature 跑这个任务』这类没点名 skill 的话都不算。显式调用形式：'/roleflow-orchestrator feature-medium 加个 dapp 超时提示'、'/roleflow-orchestrator continue 2026-05-22-dapp-connection'、'/roleflow-orchestrator rerun <task-id>'、'/roleflow-orchestrator status <task-id>'、'/roleflow-orchestrator'（列出工作流）、'用 roleflow-orchestrator 跑 feature-medium'。"
 ---
 
-# Orchestrator 工作流编排器
+# roleflow-orchestrator 工作流编排器
 
 按用户显式指定的 workflow 文件，编排多角色 subagent 逐步完成复杂任务。每个产出工件落盘到统一的 artifact 目录，在 mandatory gate 与开放问题处暂停等用户决策。
 
@@ -18,11 +18,11 @@ description: "工作流编排器。通过 /orchestrator <工作流名> <任务�
 
 | 触发 | 行为 |
 |---|---|
-| `/orchestrator <工作流名> <任务描述>` | 启动新任务 |
-| `/orchestrator continue <task-id>` | 续跑（用户已修改开放问题） |
-| `/orchestrator rerun <task-id>` | 重跑（artifact 升 v+1） |
-| `/orchestrator status <task-id>` | 查询任务状态 |
-| `/orchestrator` 不带参数 | 列出可用 workflow + 进行中 task |
+| `/roleflow-orchestrator <工作流名> <任务描述>` | 启动新任务 |
+| `/roleflow-orchestrator continue <task-id>` | 续跑（用户已修改开放问题） |
+| `/roleflow-orchestrator rerun <task-id>` | 重跑（artifact 升 v+1） |
+| `/roleflow-orchestrator status <task-id>` | 查询任务状态 |
+| `/roleflow-orchestrator` 不带参数 | 列出可用 workflow + 进行中 task |
 
 - `<工作流名>` 必须**完全等于** workflow 文件去掉 `.md` 后的文件名（大小写、连字符、下划线全部敏感）。
 - 不接受任何模糊匹配、部分匹配、别名、拼写纠正。
@@ -116,8 +116,8 @@ description: "工作流编排器。通过 /orchestrator <工作流名> <任务�
    - 2026-05-22-dapp-connection  (feature-medium@v1, 暂停在 step 2)
    - ...
 
-   请使用 /orchestrator <工作流名> <任务描述> 启动新任务，
-   或 /orchestrator continue <task-id> 续跑。
+   请使用 /roleflow-orchestrator <工作流名> <任务描述> 启动新任务，
+   或 /roleflow-orchestrator continue <task-id> 续跑。
    ```
 
 4. **停止执行**，等待用户重新输入。
@@ -249,7 +249,7 @@ Concerns: <如有>
 
 ### 正常启动新任务
 
-用户：`/orchestrator feature-medium 加个 DApp 连接超时提示`
+用户：`/roleflow-orchestrator feature-medium 加个 DApp 连接超时提示`
 
 执行：
 1. 解析：workflow=`feature-medium`，任务=`加个 DApp 连接超时提示`
@@ -263,7 +263,7 @@ Concerns: <如有>
 
 ### 拒绝模糊匹配
 
-用户：`/orchestrator FeatureMedium 加个超时`
+用户：`/roleflow-orchestrator FeatureMedium 加个超时`
 
 执行：
 1. 解析：workflow=`FeatureMedium`
@@ -272,7 +272,7 @@ Concerns: <如有>
 
 ### 续跑（用户已回填开放问题）
 
-用户：`/orchestrator continue 2026-05-22-dapp-connection`
+用户：`/roleflow-orchestrator continue 2026-05-22-dapp-connection`
 
 执行：
 1. 找到 `artifact/4.9.0/2026-05-22-dapp-connection/v1/`
@@ -282,7 +282,7 @@ Concerns: <如有>
 
 ### 续跑失败（开放问题未回填）
 
-用户：`/orchestrator continue 2026-05-22-dapp-connection`
+用户：`/roleflow-orchestrator continue 2026-05-22-dapp-connection`
 
 执行：
 1. 找到 v1 目录
@@ -303,7 +303,7 @@ Concerns: <如有>
 
 ### 重跑
 
-用户：`/orchestrator rerun 2026-05-22-dapp-connection`
+用户：`/roleflow-orchestrator rerun 2026-05-22-dapp-connection`
 
 执行：
 1. 找到现有最高版本 v2
@@ -316,7 +316,7 @@ Concerns: <如有>
 
 ### 列出（无参数）
 
-用户：`/orchestrator`
+用户：`/roleflow-orchestrator`
 
 执行：
 1. 列出 workflows/ 下所有非 `_` 开头的文件
@@ -326,7 +326,7 @@ Concerns: <如有>
 
 ### 缺 workflow 名
 
-用户：`/orchestrator 加个 dapp 超时提示`
+用户：`/roleflow-orchestrator 加个 dapp 超时提示`
 
 执行：
 1. 解析：第一个 token `加个` 不是已知 workflow / continue / rerun / status
@@ -335,8 +335,8 @@ Concerns: <如有>
 
    ```
    未识别 workflow 名。请明确指定，例如：
-   /orchestrator feature-medium 加个 dapp 超时提示
-   /orchestrator bugfix <bug 描述>
+   /roleflow-orchestrator feature-medium 加个 dapp 超时提示
+   /roleflow-orchestrator bugfix <bug 描述>
 
    可用 workflow（来自 docs/link-ai-prompt/roleflow/context/workflows/）：
    - feature-medium

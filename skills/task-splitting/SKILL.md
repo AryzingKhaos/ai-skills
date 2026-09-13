@@ -1,6 +1,6 @@
 ---
 name: task-splitting
-description: "任务拆分与工时评估。输入一份 PRD / 需求 markdown 文档（如 docs/link-ai-prompt/roleflow/requirements/<版本>/raw/prd-xx.md），结合运行目录下的真实代码评估工作量，把需求拆成每项不超过 4h 的细分任务，并给出『无 AI 参与』『有 AI 参与』两套人时估算，最终输出可直接复制粘贴进 Excel 的表格（任务大类 / 任务具体名称 / 无AI人时 / 有AI人时）。触发场景：'拆分一下这个需求的任务'、'帮我把这份 PRD 拆成工时表'、'评估下这个需求要做多久'、'/task-splitting <prd 路径>'、'按 4 小时颗粒度拆任务'、'给这个 PRD 估个工时'。"
+description: "任务拆分与工时评估。输入一份 PRD / 需求 markdown 文档（如 docs/link-ai-prompt/roleflow/requirements/<版本>/raw/prd-xx.md），结合运行目录下的真实代码评估工作量，把需求拆成每项不超过 4h 的细分任务，并给出『无 AI 参与』『有 AI 参与』两套人时估算，最终输出可直接复制粘贴进 Excel 的表格（任务大类 / 任务具体名称 / 无AI人时 / 有AI人时）。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户只是聊需求、随口说『拆一下任务』『这个要做多久』都不算。显式调用形式：'/task-splitting <prd 路径>'、'用 task-splitting 拆一下这份 PRD'、'调用 task-splitting 给这个 PRD 估工时'。"
 ---
 
 # Task Splitting 任务拆分与工时评估
