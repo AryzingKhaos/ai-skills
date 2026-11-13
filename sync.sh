@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# 执行 `bash ./sync.sh` 就能同步
 
 set -e
 

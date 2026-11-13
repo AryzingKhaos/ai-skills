@@ -1,6 +1,7 @@
 ---
 name: english-word-etymology
 description: "输入一个英语单词或短语/习语，联网查证后产出一张『词源 + 文化』卡片用于背单词。内容含：词源故事(叙事体)、历史语义演变、词根词缀拆解、🌟同根词家族(联想网络)、记忆联想，以及该词在名人名言/诗句/经典歌曲/电影电视剧中的标志性出处。出处类每条必须带可核验的来源链接，查不到可靠出处就不写、绝不编造；超高频词不硬凑出处。单词自动还原原形(running→run、better→good)，习语/短语走『典故起源』模板。中文讲解 + 英文原句保留并附译注。默认终端打印完整卡片，并存 Markdown 到 /Users/aaron/workspace/英语学习/EnglishWordWiki/<word>.md、更新 index.md，攒成成长型词源笔记本。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户句子里随口提到某个英文词不算。显式调用形式：'/english-word-etymology <word>'、'用 english-word-etymology 查 serendipity'、'查一下 X 这个词的词源/联想/文化出处'、'调用 english-word-etymology 看看 ostracize'。"
+argument-hint: "<单词或短语>"
 ---
 
 # English Word Etymology · 词源 + 文化 单词卡

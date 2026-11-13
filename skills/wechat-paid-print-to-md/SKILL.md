@@ -1,6 +1,7 @@
 ---
 name: wechat-paid-print-to-md
 description: "把一篇微信公众号【付费】文章从『打印件 PDF + 全选文本』还原成带本地配图的 Markdown 归档。付费文章无法用普通下载器抓取，用户会在微信浏览器里把文章①全选复制成 text.txt（拿到文案，配图位置留『图片』占位）②打印成 print.pdf（拿到版式+内嵌原图）。本 skill 依据 print.pdf 的版式把 text.txt 的文案与从 PDF 抽出的正文配图按顺序组合成 md，评论区头像/页脚图标等非正文自动剔除；个别正文图若在打印件里空白(网页懒加载未渲染)才回退去微信浏览器缓存补图(届时需用户授权)。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户只是贴出 text/pdf、或说『把这篇整理一下』都不算。**三个路径必须由用户显式提供、无默认值**：text.txt 路径、print.pdf 路径、md 保存目录。显式调用形式：'/wechat-paid-print-to-md --text <t> --pdf <p> --out <目录>'、'用 wechat-paid-print-to-md 把这篇付费文章组合成 md'、'调用 wechat-paid-print-to-md'。"
+argument-hint: "--text <text.txt> --pdf <print.pdf> --out <保存目录>"
 ---
 
 # 微信付费文章：打印件 + 全选文本 → 图文 Markdown

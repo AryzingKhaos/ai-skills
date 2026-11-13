@@ -1,6 +1,7 @@
 ---
 name: roleflowv2
 description: "角色加载器 v2。/roleflowv2 角色名 [任务名称]：一次完成加载角色定义、解析任务ID、定位工件目录三件事；/roleflowv2 switch 任务名：会话内切换到另一个任务（保留当前角色）——已注册的直接切，目录已存在但 taskIndex 未注册的先补登再切；/roleflowv2 init：在当前目录脚手架 roleflow(v2) 骨架。角色名强制精确匹配、拒绝模糊匹配；角色目录查找优先级、任务ID 格式、taskIndex 注册与 switch 匹配规则等细节见正文；switch/init 子命令流程在 switch.md / init.md，仅实际调用时读取。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户说『切换到 critic』『初始化 roleflow 骨架』这类没点名 skill 的话都不算。显式调用形式：'/roleflowv2 builder 审批列表'、'/roleflowv2 planner approveList'、'/roleflowv2 chat'（无任务名回退最近任务）、'/roleflowv2 switch 授权列表'、'/roleflowv2 init'、'用 roleflowv2 切换到 critic'。"
+argument-hint: "<角色名> [任务名] | switch <任务名> | init"
 ---
 
 # Roleflowv2 角色加载器

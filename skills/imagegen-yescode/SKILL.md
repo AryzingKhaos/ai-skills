@@ -1,6 +1,7 @@
 ---
 name: imagegen-yescode
 description: Generate PNG images through a Responses-style image generation endpoint such as https://co.yes.vg/v1/responses. Use when the user asks to generate an image with the custom Responses image proxy, gpt-image-1024x1024, co.yes.vg, or wants image generation using OPENAI_API_KEY instead of the built-in image_gen tool or the standard /v1/images/generations endpoint.
+argument-hint: "<图片描述> [参考图路径...] [输出路径]"
 ---
 
 # Responses ImageGen

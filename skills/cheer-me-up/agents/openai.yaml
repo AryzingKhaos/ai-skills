@@ -1,0 +1,6 @@
+interface:
+  display_name: "给我打气"
+  short_description: "从个人记录中的真实经历、行动与积累，看见值得肯定的成就和品质"
+  default_prompt: "使用 $cheer-me-up，读读我的个人记录，根据我的真实情况给我一些具体、真诚的鼓励。"
+policy:
+  allow_implicit_invocation: false

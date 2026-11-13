@@ -1,6 +1,7 @@
 ---
 name: token-calc
 description: "用于统计本机内的 claude code 和 codex 的 token 使用量情况，只有显式调用才能使用此skill"
+argument-hint: "（无参数）"
 ---
 帮我统计最近 4 周的 Claude Code 和 Codex token 使用情况。  
 

@@ -2,6 +2,7 @@
 name: progress-work
 description: "Aaron 的项目进度工具，唯一数据源是 /Users/aaron/workspace/个人/工作相关/所有事项进度.md，项目清单以其中『统计的项目地址』为准（项目数量不固定）。只有四个子命令，必须带子命令调用，子命令大小写敏感、精确匹配（只认全小写的 record / draft / commit / push，Record、DRAFT、drafts 都不算），单独输入 '/progress-work' 不执行任何操作：①'record' → 记录进度：单独 'record' 对『统计的项目地址』里的所有项目，用 AI 会话日志、文件修改时间、git 自动整理本周改动；'record <具体描述>' 按描述文字执行（限定时间或项目、写入用户说的进度等）；两种方式都会按『统计方式』同步『项目开发细则』(宁缺毋滥，只收功能点级别的对象)，写入前出草稿；②'draft' → 为每个项目仓库写英文提交文案；③'commit' → 提交；④'push' → 推送到远端。draft / commit / push 互相独立、可以连用（如 'draft commit push'），不指定项目就对『统计的项目地址』里的每个项目分别执行，提交身份不是 Aaron <aaron4lawliet@gmail.com> 时必须先让用户确认。**必须显式调用：只有用户亲手输入 /progress-work <子命令> 才能使用此 skill**，Claude 不得自行调用，禁止模糊匹配触发——用户随口说『记一下今天做了啥』『把这几个仓库提交推送一下』都不算。同样禁止猜测：项目对应不到唯一一个、日期含糊、改动内容看不懂、参数里有认不出的词，一律先问用户。"
 disable-model-invocation: true
+argument-hint: "record [描述] | draft | commit | push（后三个可连用）"
 ---
 
 # progress-work · 项目进度

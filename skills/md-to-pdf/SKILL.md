@@ -1,6 +1,7 @@
 ---
 name: md-to-pdf
 description: "把 markdown 文件渲染成排版规整的 PDF（A4、中文友好、表格 / 引用 / 代码块齐全）。走 weasyprint + Pango 管线，原生支持 PingFang / Hiragino 等系统中文字体，不掉字。触发场景：'把这个 md 转成 pdf'、'生成 pdf'、'/md-to-pdf <path>'、'帮我把 xxx.md 导出为 pdf'、'markdown 转 pdf'。"
+argument-hint: "<md 文件路径> [输出 pdf 路径]"
 ---
 
 # MD → PDF

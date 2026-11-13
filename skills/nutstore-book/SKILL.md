@@ -1,6 +1,7 @@
 ---
 name: nutstore-book
 description: "把各种文本/电子书格式（md、txt、html、rtf、doc/docx、epub、mobi、azw3 等）转成排版规整、中文不掉字的 A4 PDF，默认输出到坚果云『书籍』同步目录（自动上传）。走 weasyprint + Pango 管线，CJK 原生渲染。触发场景：'把这个 mobi/epub/docx 转成 pdf'、'转成 pdf 传到坚果云'、'/nutstore-book <file>'、'把这本书转 pdf 放书籍目录'、'批量转 pdf 上传坚果云'。md 转 pdf 复用 md-to-pdf skill。"
+argument-hint: "<文件...> [输出路径，默认坚果云书籍目录]"
 ---
 
 # nutstore-book —— 任意文本/电子书转 PDF，落到坚果云书籍目录

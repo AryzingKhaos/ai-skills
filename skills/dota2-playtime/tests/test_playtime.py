@@ -132,11 +132,7 @@ class BudgetRuleTests(unittest.TestCase):
 
         self.assertEqual(result, 2 * 3600 + 55 * 60)
 
-    def test_main_reports_planb_breakdown_and_effective_cap(self):
-        self.write_work_ledger([
-            "| 2026-08-17 ~ 2026-08-23 | 2h00m | 4h18m | 2026-08-20 |\n"
-        ])
-
+    def run_main(self, *extra_args):
         class FixedDateTime(datetime.datetime):
             @classmethod
             def now(cls, tz=None):
@@ -154,14 +150,22 @@ class BudgetRuleTests(unittest.TestCase):
             "playtime.py",
             "--ledger", str(self.dota_ledger),
             "--work-ledger", str(self.work_ledger),
+            *extra_args,
         ]
         with patch.object(playtime.datetime, "datetime", FixedDateTime), \
              patch.object(playtime, "get", fake_get), \
              patch.object(sys, "argv", argv), \
              redirect_stdout(stdout):
             playtime.main()
+        return stdout.getvalue()
 
-        output = stdout.getvalue()
+    def test_main_reports_planb_breakdown_and_effective_cap(self):
+        self.write_work_ledger([
+            "| 2026-08-17 ~ 2026-08-23 | 2h00m | 4h18m | 2026-08-20 |\n"
+        ])
+
+        output = self.run_main()
+
         self.assertIn("基础时限 **10 小时**", output)
         self.assertIn("当周 Plan B **4 小时 18 分钟**", output)
         self.assertIn("当周有效时限：14 小时 18 分钟", output)
@@ -170,6 +174,27 @@ class BudgetRuleTests(unittest.TestCase):
         self.assertEqual(budget["base_cap_hours"], 10.0)
         self.assertEqual(budget["planb_bonus_seconds"], 4 * 3600 + 18 * 60)
         self.assertEqual(budget["effective_cap_hours"], 14.3)
+
+    def test_main_puts_weekend_balance_headline_first(self):
+        self.write_work_ledger([
+            "| 2026-08-17 ~ 2026-08-23 | 2h00m | 4h18m | 2026-08-20 |\n"
+        ])
+
+        output = self.run_main()
+
+        headline = "## 📦 周末总结余：14 小时 18 分钟"
+        self.assertIn(headline, output)
+        self.assertLess(output.index(headline), output.index("## ⏱️"))
+        self.assertEqual(output.count("周末总结余："), 1)
+
+    def test_main_marks_negative_weekend_balance_as_overdraft(self):
+        self.write_work_ledger([
+            "| 2026-08-17 ~ 2026-08-23 | 2h00m | 4h18m | 2026-08-20 |\n"
+        ])
+
+        output = self.run_main("--balance-hours", "-20")
+
+        self.assertIn("## ⚠️ 周末总结余：-5 小时 42 分钟（透支）", output)
 
 
 if __name__ == "__main__":

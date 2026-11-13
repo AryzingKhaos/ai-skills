@@ -1,6 +1,7 @@
 ---
 name: token-calc-raw
 description: "直接从本机 ~/.claude/projects/**/*.jsonl 聚合 Claude Code token 用量，不依赖 ccusage / npx 外部工具。支持自定义时间窗口（过去 N 天 / 起止日期），按模型 / 按天 / 按项目分组并折算 USD 成本。**只有显式调用才能使用此 skill**，禁止模糊匹配触发。显式调用形式：`/token-calc-raw [参数]`、'用 token-calc-raw 算 X 天用量'、'调用 token-calc-raw'。"
+argument-hint: "[过去 N 天 | 起始日期 [~ 结束日期]]"
 ---
 
 # token-calc-raw

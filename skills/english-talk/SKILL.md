@@ -1,6 +1,7 @@
 ---
 name: english-talk
 description: "Aaron 的英语口语陪练（文字形式）。按场景开一段全英文对话，每一轮固定产出三块：Reply（自然的英文回应，把对话推下去）、矫正（大错在 Reply 里先自然改说一遍再详细讲，小错只在矫正区一行带过）、生词（低频词标注音标词性和中文释义）。讲解一律用中文，对话本体一律英文。场景写在 scenarios/<场景>.md，用 '/english-talk dota2' 就加载 scenarios/dota2.md 的角色、话题和词汇库；不带参数默认 daily。每轮实时把记录追加到 /Users/aaron/workspace/个人/生活/English/<场景>/<日期>.md，生词 upsert 进同目录的 词汇.md（去重、累加出现次数）。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户随口说了句英文、或让你把某段话翻译成英文，都不算调用。显式调用形式：'/english-talk'、'/english-talk dota2'、'/english-talk list'、'/english-talk end'、'用 english-talk 练一段英语口语'。"
+argument-hint: "[场景，默认 daily] | list | end"
 ---
 
 # English Talk · 场景化英语口语陪练

@@ -1,6 +1,7 @@
 ---
 name: work-time
 description: "统计 Aaron『用 AI 工作的真实时长』并按完整项目路径分成工作项目、planB项目、其他项目。自动发现 ~/.claude、全部 ~/.claude.* 和 Codex 会话，但正常运行只读取新增或变化日志的尾部；事件按本地自然周增量归档到工作时长-originData 目录中的独立 Markdown，再更新台账。计时时先按项目路径确定事件类型，然后在每种类型内部独立把相邻间隔≤30分钟的事件合并为连续段，每段前后各加5分钟；不同类型不会互相吞并或连接。也支持 start/end/endTime 手动记录看书、开会、线下工作和纯思考，完成的手动段计入 planB项目。定位是观测、不考核。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户随口问『这周/上周 AI 工作了多久』、聊工时分类或 planB 路径都不算。显式调用形式：'/work-time'、'/work-time start 看书'、'/work-time end'、'用 work-time 统计上周工时'、'调用 work-time 修改 planB 路径'。"
+argument-hint: "[N天 | 日期范围] | start <内容> | end [内容] | endTime <HH:MM> | status"
 ---
 
 # work-time

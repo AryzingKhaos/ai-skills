@@ -4,6 +4,7 @@ description: >
   把已经排版好的 HTML 文章 + 封面图上传到微信公众号草稿箱。本 skill 只做"发布到草稿"这一件事；写稿请用 Viral_Writer_Skill，排版请用 web-artifacts-builder。
   触发场景：'上传到公众号草稿箱'、'发到公众号'、'/wechat-publisher 发 <文件>'、'把这个 HTML 推到微信草稿'。
   不触发：用户只是想写公众号内容（去 Viral_Writer_Skill）；只是想美化排版（去 web-artifacts-builder）。
+argument-hint: "<HTML 文件> [封面图]"
 ---
 
 # wechat-publisher 公众号草稿上传

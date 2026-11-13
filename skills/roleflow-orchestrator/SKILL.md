@@ -1,6 +1,7 @@
 ---
 name: roleflow-orchestrator
 description: "工作流编排器。通过 /roleflow-orchestrator <工作流名> <任务描述> 启动多角色 subagent 编排，支持 continue（续跑）/ rerun（重跑）/ status（查询）/ 不带参（列出可用工作流）。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户说『启动工作流』『用 onchain-feature 跑这个任务』这类没点名 skill 的话都不算。显式调用形式：'/roleflow-orchestrator feature-medium 加个 dapp 超时提示'、'/roleflow-orchestrator continue 2026-05-22-dapp-connection'、'/roleflow-orchestrator rerun <task-id>'、'/roleflow-orchestrator status <task-id>'、'/roleflow-orchestrator'（列出工作流）、'用 roleflow-orchestrator 跑 feature-medium'。"
+argument-hint: "<工作流名> <任务描述> | continue|rerun|status <task-id>"
 ---
 
 # roleflow-orchestrator 工作流编排器

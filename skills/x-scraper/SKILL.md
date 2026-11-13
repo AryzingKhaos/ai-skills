@@ -1,6 +1,7 @@
 ---
 name: x-scraper
 description: "用 Playwright（用户已登录的浏览器会话）绕过 X/Twitter 限流，抓取指定账号的历史推文（含被折叠的长帖全文），产出可翻译/归纳的 digest。核心手法：日期窗口搜索绕开深滚墙、多语言折叠检测、status 详情页分批回填全文+冷却、双胞胎去重。触发场景：'抓取 @某人 的历史推特'、'爬一下这个 X 账号的所有观点'、'把某人的推文整理成时间线'、'归档某个 twitter 账号'、'绕过推特限流爬推文'、'/x-scraper @handle'、'获取某账号关于 xxx 的全部发帖'。不适用：抓单条推文（直接开 status 页即可，无需本流程）；非 X 平台。"
+argument-hint: "@handle [时间范围] [主题]"
 ---
 
 # x-scraper · 用 Playwright 抓取 X/Twitter 账号历史推文

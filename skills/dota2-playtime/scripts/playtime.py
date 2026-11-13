@@ -185,6 +185,10 @@ def fmt_dur(sec):
     if m: return "%d 分钟 %d 秒" % (m, s)
     return "%d 秒" % s
 
+def fmt_signed(sec):
+    """带符号时长：负结余 = 透支，显示为 '-X 小时 Y 分钟'。"""
+    return ("-" if sec < 0 else "") + fmt_dur(abs(sec))
+
 LOBBY = {0: "普通匹配", 1: "练习", 2: "锦标赛", 4: "合作AI", 5: "车队", 6: "赛事",
          7: "天梯", 8: "1v1中路", 9: "勇士联赛", 12: "战队", 13: "新手"}
 def lobby_name(n): return LOBBY.get(n, "模式%s" % n)
@@ -356,6 +360,7 @@ def main():
     rem_cap = cap_s - real_total     # 距 当周有效时限
     rem_hard = hard_s - real_total   # 距 超限红线（时限+结余）
     projected_balance_s = calculate_end_balance(bal_s, cap_hours, real_total) if a.days is None else None
+    bal_disp = fmt_signed(bal_s)
 
     # ---- 天梯上下分 ----
     base_mmr = a.mmr if a.mmr is not None else rank_tier_to_mmr(rank_tier)
@@ -367,6 +372,14 @@ def main():
     P = out.append
     P("# Dota2 真实消耗 + 健康预算 + 天梯进度 · 账号 %d（%s）" %
       (a.account, rank_tier_str(rank_tier)[0]))
+    if projected_balance_s is not None:
+        P("")
+        if projected_balance_s >= 0:
+            P("## 📦 周末总结余：%s" % fmt_signed(projected_balance_s))
+        else:
+            P("## ⚠️ 周末总结余：%s（透支）" % fmt_signed(projected_balance_s))
+        P("> 期初结余 %s + 当周有效时限 %s − 已消耗 %s。本周未结束，这是按当前数据的预计值：之后做 Plan B 会增加，再打 DOTA 会减少。"
+          % (bal_disp, fmt_dur(cap_s), fmt_dur(real_total)))
     P("")
     P("- **统计窗口**：%s ～ %s（%s，本地 %s）"
       % (window_start.strftime("%Y-%m-%d %H:%M"), window_end.strftime("%Y-%m-%d %H:%M"), mode_label, tzname))
@@ -398,7 +411,6 @@ def main():
     else:
         P("- 已超 %s 小时%s **%s**。" % (fmt_h(cap_hours), cap_name, fmt_dur(-rem_cap)))
     bal_name = {"ledger": "台账结余", "arg": "命令行结余"}.get(bal_source)
-    bal_disp = ("-" if bal_s < 0 else "") + fmt_dur(abs(bal_s))
     if bal_name:
         if bal_s < 0:
             P("- ⚠️ 可用结余为**负（负债 %s，%s，上周透支）** → **本周可用总量 = 有效时限 − 负债 = %s 小时（超限红线）**。"
@@ -415,10 +427,6 @@ def main():
         P("- 无可用结余，已恰好到达超限红线，本周不能再增加 DOTA 消耗。")
     elif rem_hard < 0:
         P("- 无可用结余，已超超限红线 **%s**，超出部分将计为负结余（透支）；超 2h 🚨、超 5h 🛑 下周强制停玩。" % fmt_dur(-rem_hard))
-    if a.days is None:
-        projected_disp = ("-" if projected_balance_s < 0 else "") + fmt_dur(abs(projected_balance_s))
-        P("- 📦 **按当前数据预计周末总结余：%s** = 期初结余 %s + 当周有效时限 %s − 已消耗 %s（本周后续 Plan B / DOTA 变化会继续动态更新）。"
-          % (projected_disp, bal_disp, fmt_dur(cap_s), fmt_dur(real_total)))
     P("")
     P("| 时长构成 | 口径 | 时长 |")
     P("|---|---|---|")
@@ -489,7 +497,7 @@ def main():
             "severe_h": round(severe_h, 2), "cap_h": round(cap_hours, 2),
             "balance_seconds": int(bal_s), "balance_human": bal_disp, "balance_source": bal_source,
             "projected_end_balance_seconds": int(round(projected_balance_s)) if projected_balance_s is not None else None,
-            "projected_end_balance_human": (("-" if projected_balance_s < 0 else "") + fmt_dur(abs(projected_balance_s))) if projected_balance_s is not None else None,
+            "projected_end_balance_human": fmt_signed(projected_balance_s) if projected_balance_s is not None else None,
             "hard_cap_hours": round(hard_h, 2),
             "over_base": real_total >= warn_s, "over_severe": real_total >= severe_s,
             "over_limit_using_balance": real_total > cap_s and bal_s > 0 and real_total <= hard_s,

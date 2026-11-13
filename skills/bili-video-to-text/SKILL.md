@@ -1,6 +1,7 @@
 ---
 name: bili-video-to-text
 description: "从 B 站（bilibili）视频链接下载音频、用 whisper 转写成文字，并整理成『分段 + 每段小标题』的简体中文文字稿。当用户给出一个 bilibili.com 视频链接（含 BV 号）并希望『转成文字/转文字/转写/听写/做文字稿/扒下来整理成文档/生成字幕文本』时，主动使用本 skill；用户没明说『用whisper』也算。本 skill 内含绕过 B 站 412 反爬（--cookies-from-browser）、whisper 转写、以及把粗糙转写文本细分小段并加小标题的整理规则。与 video2text 区分：video2text 处理本地视频文件、产出 srt/双语字幕；本 skill 从视频链接下载、产出整理好的中文 txt 文稿。"
+argument-hint: "<B站视频链接>"
 ---
 
 # B 站视频转文字稿

@@ -1,6 +1,7 @@
 ---
 name: pantools-baidu-transfer
 description: "把 PanTools 目录分享页（list.pantools.cn/u_xxx，可能带访问密码）里某个文件夹下的所有文件（含多层子文件夹），通过『分享→打开链接→提取文件→保存到网盘』批量转存到用户百度网盘的指定目录。用一个独立的、与用户日常 Chrome 隔离的浏览器实例（独立 user-data-dir + 专用远程调试端口），由 playwright-core 经 CDP 驱动；百度登录态由用户在该独立窗口里自行登录、随 profile 持久化。内置：递归遍历目录树+分页抓全量文件清单(manifest)、逐个转存(设置保存路径=指定目录→保存到网盘→校验『保存成功』)、断点续跑(progress.json 跳过已存)、限流自动暂停。**只有显式调用才能使用此 skill**，禁止模糊匹配触发。显式调用形式：'/pantools-baidu-transfer <分享链接> [密码] [目标网盘目录]'、'用 pantools-baidu-transfer 把这个 pantools 链接的文件转存到我的网盘 AI视频保存'、'调用 pantools-baidu-transfer 批量保存到网盘'。"
+argument-hint: "<分享链接> [访问密码] [目标网盘目录]"
 ---
 
 # PanTools 目录 → 百度网盘 批量转存

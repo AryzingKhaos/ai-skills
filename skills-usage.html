@@ -1,0 +1,1177 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skill 速查</title>
+<style>
+  :root {
+    --bg: #f3f8fe;
+    --bg-hero: linear-gradient(180deg, #e3f0fd 0%, #f3f8fe 100%);
+    --surface: #ffffff;
+    --surface-2: #f1f7fe;
+    --border: #dae7f5;
+    --border-strong: #c3d8f0;
+    --text: #182a3d;
+    --text-2: #4d6378;
+    --text-3: #8396ab;
+    --primary: #2f80ed;
+    --primary-strong: #1c63c6;
+    --primary-soft: #e4f0fd;
+    --primary-ring: rgba(47, 128, 237, .22);
+    --opt: #8396ab;
+    --pipe: #b3c5d9;
+    --shadow: 0 1px 2px rgba(28, 82, 150, .05), 0 6px 20px rgba(28, 82, 150, .05);
+    --toast-bg: #182a3d;   --toast-text: #ffffff;
+    --cat-work: #2f80ed;  --cat-flow: #5b5fe0;  --cat-life: #cf6a1c;  --cat-invest: #0e9384;
+    --cat-game: #8f52dd;  --cat-learn: #2b8f40; --cat-collect: #a36d14; --cat-files: #0a87a8;
+    --cat-write: #cc3a76; --cat-tool: #5f6f84;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0d1724;
+      --bg-hero: linear-gradient(180deg, #11233a 0%, #0d1724 100%);
+      --surface: #142132;
+      --surface-2: #19293e;
+      --border: #22354d;
+      --border-strong: #2e4663;
+      --text: #e2ebf5;
+      --text-2: #a2b3c6;
+      --text-3: #6d8298;
+      --primary: #6aaefc;
+      --primary-strong: #93c4ff;
+      --primary-soft: #183150;
+      --primary-ring: rgba(106, 174, 252, .28);
+      --opt: #7c90a6;
+      --pipe: #3d536d;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .25), 0 6px 20px rgba(0, 0, 0, .18);
+      --toast-bg: #e2ebf5;   --toast-text: #0d1724;
+      --cat-work: #6aaefc;  --cat-flow: #9b9dff;  --cat-life: #f5a463;  --cat-invest: #4fd1c0;
+      --cat-game: #c49bff;  --cat-learn: #6fd18a; --cat-collect: #e6b450; --cat-files: #5fcbe6;
+      --cat-write: #f37aae; --cat-tool: #a3b1c4;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0d1724;
+    --bg-hero: linear-gradient(180deg, #11233a 0%, #0d1724 100%);
+    --surface: #142132;
+    --surface-2: #19293e;
+    --border: #22354d;
+    --border-strong: #2e4663;
+    --text: #e2ebf5;
+    --text-2: #a2b3c6;
+    --text-3: #6d8298;
+    --primary: #6aaefc;
+    --primary-strong: #93c4ff;
+    --primary-soft: #183150;
+    --primary-ring: rgba(106, 174, 252, .28);
+    --opt: #7c90a6;
+    --pipe: #3d536d;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .25), 0 6px 20px rgba(0, 0, 0, .18);
+    --toast-bg: #e2ebf5;   --toast-text: #0d1724;
+    --cat-work: #6aaefc;  --cat-flow: #9b9dff;  --cat-life: #f5a463;  --cat-invest: #4fd1c0;
+    --cat-game: #c49bff;  --cat-learn: #6fd18a; --cat-collect: #e6b450; --cat-files: #5fcbe6;
+    --cat-write: #f37aae; --cat-tool: #a3b1c4;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-padding-top: 20px; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.65 -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  code, .mono { font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, "PingFang SC", monospace; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+  button { font: inherit; }
+
+  /* ---------- hero ---------- */
+  .hero { background: var(--bg-hero); border-bottom: 1px solid var(--border); padding: 40px 0 26px; }
+  .hero-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 14px; }
+  .logo {
+    width: 44px; height: 44px; border-radius: 12px; flex: none;
+    background: var(--primary); color: #fff;
+    display: grid; place-items: center;
+    font: 600 22px/1 "SF Mono", Menlo, monospace;
+    box-shadow: 0 6px 16px var(--primary-ring);
+  }
+  h1 { margin: 0; font-size: 26px; font-weight: 650; letter-spacing: .01em; }
+  .sub { margin: 2px 0 0; color: var(--text-2); font-size: 14px; }
+  .theme-btn {
+    flex: none; width: 36px; height: 36px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-2);
+    display: grid; place-items: center; cursor: pointer;
+  }
+  .theme-btn:hover { color: var(--primary); border-color: var(--border-strong); }
+
+  .search { display: block; margin-top: 24px; position: relative; max-width: 560px; }
+  .search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-3); }
+  .search input {
+    width: 100%; height: 46px; padding: 0 44px 0 42px;
+    border-radius: 12px; border: 1px solid var(--border-strong);
+    background: var(--surface); color: var(--text); font: inherit; font-size: 15px;
+    outline: none; transition: border-color .15s, box-shadow .15s;
+  }
+  .search input::placeholder { color: var(--text-3); }
+  .search input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-ring); }
+  .search kbd {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    font: 12px/1 "SF Mono", Menlo, monospace; color: var(--text-3);
+    border: 1px solid var(--border); border-radius: 6px; padding: 4px 7px; background: var(--surface-2);
+  }
+
+  .chips { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-2);
+    border-radius: 999px; padding: 5px 13px; font-size: 13.5px; cursor: pointer;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .chip:hover { border-color: var(--border-strong); color: var(--text); }
+  .chip .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--c); }
+  .chip .n { opacity: .65; font-size: 12px; }
+  .chip[aria-pressed="true"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .chip[aria-pressed="true"] .dot { background: #fff; }
+
+  .bar { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--text-3); }
+  .legend code { font-size: 12.5px; }
+  .bulk {
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid var(--border); background: var(--surface); color: var(--text-2);
+    border-radius: 9px; padding: 5px 12px; font-size: 13px; cursor: pointer;
+  }
+  .bulk:hover { color: var(--primary); border-color: var(--border-strong); }
+
+  /* ---------- layout ---------- */
+  .layout { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 36px; padding: 28px 0 56px; }
+  .toc {
+    position: sticky; top: 20px; align-self: start; font-size: 13.5px;
+    max-height: calc(100vh - 40px); overflow-y: auto; padding-right: 4px;
+  }
+  .toc h4 { display: flex; align-items: center; gap: 7px; margin: 0 0 4px; font-size: 12px; font-weight: 600; color: var(--text-3); letter-spacing: .06em; }
+  .toc h4::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--c); }
+  .toc ul { list-style: none; margin: 0 0 14px; padding: 0; }
+  .toc a {
+    display: block; padding: 3px 10px; margin-left: -10px; border-radius: 7px;
+    color: var(--text-2); text-decoration: none; font-family: "SF Mono", Menlo, monospace; font-size: 12.5px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .toc a:hover { background: var(--primary-soft); color: var(--primary-strong); }
+  .cards { display: grid; gap: 14px; }
+  .empty { display: none; text-align: center; color: var(--text-3); padding: 48px 0; }
+
+  /* ---------- card ---------- */
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+    padding: 18px 20px 18px 24px; box-shadow: var(--shadow);
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .card.flash { border-color: var(--primary); box-shadow: 0 0 0 4px var(--primary-ring); }
+  .card-top { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+  .card-main { flex: 1; min-width: 0; }
+  .card-head { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 10px; }
+  .card-name { margin: 0; font: 600 17.5px/1.35 "SF Mono", "JetBrains Mono", Menlo, monospace; }
+  .tag { font-size: 12px; line-height: 1; padding: 5px 9px; border-radius: 999px; font-weight: 500; white-space: nowrap; }
+  .tag-cat { color: var(--c); background: color-mix(in srgb, var(--c) 13%, transparent); }
+  .tag-plain { color: var(--text-2); border: 1px solid var(--border-strong); padding: 4px 8px; }
+  .src { margin-left: auto; font-size: 12.5px; color: var(--text-3); text-decoration: none; white-space: nowrap; }
+  .src:hover { color: var(--primary); }
+  .summary { margin: 6px 0 0; color: var(--text-2); }
+
+  .toggle {
+    flex: none; display: inline-flex; align-items: center; gap: 6px; margin-top: -2px;
+    height: 30px; padding: 0 8px 0 10px; border-radius: 8px; border: 0; cursor: pointer;
+    background: transparent; color: var(--text-3); font-size: 12.5px; white-space: nowrap;
+  }
+  .card-top:hover .toggle, .toggle:focus-visible { background: var(--primary-soft); color: var(--primary); }
+  .toggle svg { transition: transform .22s ease; }
+  .card[data-open="true"] .toggle svg { transform: rotate(180deg); }
+
+  .syntax {
+    margin-top: 12px; display: flex; align-items: flex-start; gap: 10px;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 9px 10px 9px 14px;
+  }
+  .syntax code { flex: 1; font-size: 13.5px; line-height: 1.6; overflow-wrap: anywhere; padding-top: 3px; }
+  .t-cmd { color: var(--primary-strong); font-weight: 600; }
+  .t-req { color: var(--primary); }
+  .t-opt { color: var(--opt); }
+  .t-pipe { color: var(--pipe); padding: 0 1px; }
+
+  .icon-btn {
+    flex: none; width: 30px; height: 30px; border-radius: 8px; border: 0; cursor: pointer;
+    background: transparent; color: var(--text-3); display: grid; place-items: center;
+  }
+  .icon-btn:hover { background: var(--primary-soft); color: var(--primary); }
+
+  .card-body { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .24s ease; }
+  .card[data-open="true"] .card-body { grid-template-rows: 1fr; }
+  .card-body > .inner { overflow: hidden; min-height: 0; }
+
+  .label { margin: 18px 0 8px; font-size: 12px; font-weight: 600; color: var(--text-3); letter-spacing: .08em; }
+  .usage { display: grid; grid-template-columns: max-content minmax(0, 1fr); border-top: 1px solid var(--border); }
+  .usage > * { border-bottom: 1px solid var(--border); padding: 9px 0; }
+  .usage .desc { padding-left: 20px; color: var(--text-2); font-size: 14px; display: flex; align-items: center; }
+  .cmd-wrap { display: flex; align-items: center; }
+  .cmd {
+    display: inline-flex; align-items: center; gap: 8px; max-width: 460px;
+    font: 13px/1.5 "SF Mono", "JetBrains Mono", Menlo, monospace; color: var(--text);
+    background: var(--primary-soft); border: 1px solid transparent; border-radius: 8px;
+    padding: 4px 10px; cursor: pointer; text-align: left; overflow-wrap: anywhere;
+    transition: border-color .15s;
+  }
+  .cmd:hover { border-color: var(--primary); }
+  .cmd svg { color: var(--text-3); flex: none; opacity: 0; transition: opacity .15s; }
+  .cmd:hover svg, .cmd:focus-visible svg, .cmd.copied svg { opacity: 1; color: var(--primary); }
+  .cmd.copied { border-color: var(--primary); }
+  .cmd.nl { background: transparent; border: 1px dashed var(--border-strong); color: var(--text-2); }
+
+  .notes { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 16px; font-size: 14px; }
+  .notes dt { color: var(--text-3); }
+  .notes dd { margin: 0; color: var(--text-2); }
+  .notes code, .desc code, .summary code {
+    font-size: 12.5px; background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 5px; padding: 1px 5px; color: var(--text); overflow-wrap: anywhere;
+  }
+  .related { margin-top: 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 13px; color: var(--text-3); }
+  .related a {
+    font: 12.5px "SF Mono", Menlo, monospace; color: var(--primary); text-decoration: none;
+    border: 1px solid var(--border); border-radius: 999px; padding: 2px 10px;
+  }
+  .related a:hover { border-color: var(--primary); background: var(--primary-soft); }
+
+  mark { background: rgba(255, 214, 102, .55); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 16px);
+    background: var(--toast-bg); color: var(--toast-text); font-size: 13.5px;
+    padding: 9px 16px; border-radius: 10px; opacity: 0; pointer-events: none;
+    transition: opacity .2s, transform .2s; max-width: calc(100vw - 32px);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  footer { color: var(--text-3); font-size: 13px; padding-bottom: 40px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .card-body, .toggle svg { transition: none; }
+  }
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: minmax(0, 1fr); padding-top: 20px; }
+    .toc { display: none; }
+  }
+  @media (max-width: 600px) {
+    .wrap { padding: 0 16px; }
+    .hero { padding: 28px 0 20px; }
+    h1 { font-size: 22px; }
+    .card { position: relative; padding: 16px 14px 16px 16px; border-radius: 14px; }
+    .card-head { padding-right: 34px; }
+    .src { margin-left: 0; width: 100%; }
+    .toggle .count { display: none; }
+    .toggle { position: absolute; top: 14px; right: 10px; margin: 0; padding: 0 7px; }
+    .usage { grid-template-columns: minmax(0, 1fr); }
+    .usage .cmd-wrap { border-bottom: 0; padding-bottom: 2px; }
+    .usage .desc { padding-left: 2px; padding-top: 0; font-size: 13.5px; }
+    .cmd { max-width: 100%; }
+    .notes { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .notes dd { margin-bottom: 8px; }
+    .search kbd { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">/</div>
+        <div>
+          <h1>Skill 速查</h1>
+          <p class="sub" id="sub"></p>
+        </div>
+      </div>
+      <button class="theme-btn" id="themeBtn" type="button" aria-label="切换深浅色" title="切换深浅色">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+
+    <label class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="搜 skill 名、子命令或用途，如 commit、打卡、网盘" autocomplete="off" aria-label="搜索 skill">
+      <kbd>/</kbd>
+    </label>
+
+    <div class="chips" id="chips" role="group" aria-label="按分类筛选"></div>
+
+    <div class="bar">
+      <div class="legend" aria-label="语法图例">
+        <span><code class="t-req">&lt;必填&gt;</code></span>
+        <span><code><span class="t-opt">[</span>可选<span class="t-opt">]</span></code></span>
+        <span><code>a <span class="t-pipe">|</span> b</code> 多选一</span>
+      </div>
+      <button class="bulk" id="bulk" type="button"></button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap layout">
+  <nav class="toc" id="toc" aria-label="目录"></nav>
+  <main>
+    <div class="cards" id="cards"></div>
+    <p class="empty" id="empty">没有匹配的 skill</p>
+  </main>
+</div>
+
+<footer class="wrap">语法行即各 SKILL.md 的 <code>argument-hint</code>；点任意命令可复制。改了 hint 后可运行 <code>python3 check_skills_usage.py</code> 核对。</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+ * 数据：每个 skill 一项，按分类和使用频率排序。
+ *   name    = SKILL.md 的 name（斜杠命令名）；目录名不同时写 dir
+ *   hint    = SKILL.md 的 argument-hint（原样，check_skills_usage.py 会核对）
+ *   usage   = [命令, 说明]；不以 / 开头的命令是自然语言调用
+ *   notes   = [标签, 内容]；内容里的 `xxx` 渲染成代码
+ *   manual  = 仅能手动输入（disable-model-invocation）
+ *   auto    = 不点名也会自动触发
+ * ============================================================ */
+const CATEGORIES = {
+  work:    "工作",
+  flow:    "角色流程",
+  life:    "目标与生活",
+  invest:  "投资",
+  game:    "游戏",
+  learn:   "学习",
+  collect: "采集与转写",
+  files:   "文件与网盘",
+  write:   "写作发布",
+  tool:    "Claude 工具",
+};
+
+const SKILLS = [
+  /* ---------------- 工作 ---------------- */
+  {
+    name: "progress-work",
+    cat: "work",
+    manual: true,
+    summary: "项目进度工具：把本周改动整理进进度表，再给各仓库写提交文案、提交、推送。",
+    hint: "record [描述] | draft | commit | push（后三个可连用）",
+    usage: [
+      ["/progress-work record", "对所有项目自动整理本周改动，同步项目开发细则；写入前先出草稿"],
+      ["/progress-work record 上周的 llmWikis", "按描述执行：限定时间、限定项目，或写入你说的进度"],
+      ["/progress-work draft", "为每个项目仓库写英文提交文案（只读，不提交）"],
+      ["/progress-work commit", "提交"],
+      ["/progress-work push", "推送到远端"],
+      ["/progress-work draft commit push", "三步连用，按顺序执行"],
+    ],
+    notes: [
+      ["数据源", "`~/workspace/个人/工作相关/所有事项进度.md`，项目清单以其中「统计的项目地址」为准"],
+      ["注意", "子命令只认全小写；不带子命令或写错（如 `Record`）都不会执行"],
+      ["调用", "只能你亲手输入，Claude 不会自己调用"],
+    ],
+    related: ["work-time"],
+  },
+  {
+    name: "work-time",
+    cat: "work",
+    summary: "统计你用 AI 工作的真实时长，按项目路径分成工作 / planB / 其他三类；也能手动打卡记录看书、开会。",
+    hint: "[N天 | 日期范围] | start <内容> | end [内容] | endTime <HH:MM> | status",
+    usage: [
+      ["/work-time", "统计当前自然周：增量归档会话日志，并更新台账"],
+      ["/work-time 上周", "统计其他时间段，过去 N 天、指定日期范围也行"],
+      ["/work-time start 看书", "开始手动打卡，结束后计入 planB"],
+      ["/work-time end", "结束打卡；后面可再写内容，覆盖 start 时写的"],
+      ["/work-time endTime 22:30", "按指定时间结束打卡，忘了及时 end 时用"],
+      ["/work-time status", "查看当前有没有进行中的打卡"],
+      ["调用 work-time 修改 planB 路径", "改了项目分类路径后，用已归档数据重分台账"],
+    ],
+    notes: [
+      ["台账", "`~/workspace/个人/生活/工作时长.md`，项目路径也在这里维护"],
+      ["口径", "同类事件间隔 ≤30 分钟合并成一段，每段前后各加 5 分钟"],
+      ["注意", "进行中的打卡不计时，`end` 或 `endTime` 之后才算"],
+    ],
+    related: ["dota2-playtime", "rest-check", "progress-work"],
+  },
+  {
+    name: "task-splitting",
+    cat: "work",
+    summary: "把一份 PRD 拆成每项不超过 4h 的细分任务，结合当前目录的真实代码，给出无 AI / 有 AI 两套人时估算。",
+    hint: "<PRD 文件路径>",
+    usage: [
+      ["/task-splitting raw/prd-01.md", "拆分这份 PRD 并估工时"],
+    ],
+    notes: [
+      ["代码目录", "默认是当前运行目录，在哪个仓库里跑就评估哪个仓库的代码"],
+      ["输出", "4 列 TSV：任务大类 / 任务具体名称 / 无AI人时 / 有AI人时，直接粘进 Excel 会自动分列"],
+      ["分组", "默认按模块（M01…）分任务大类"],
+    ],
+  },
+  {
+    name: "brainstorm-myself",
+    cat: "work",
+    auto: true,
+    summary: "动手实现之前，先通过对话把模糊的想法打磨成双方认可的设计和 spec。",
+    hint: "<主题或想法>",
+    usage: [
+      ["/brainstorm-myself 给 work-time 加月报", "围绕一个主题开始讨论"],
+      ["先别写代码，先讨论方案", "这类说法也会触发"],
+    ],
+    notes: [
+      ["产出", "设计文档存到 `docs/specs/YYYY-MM-DD-<topic>-design.md` 并提交；你指定路径时以你的为准"],
+    ],
+  },
+
+  /* ---------------- 角色流程 ---------------- */
+  {
+    name: "roleflowv2",
+    cat: "flow",
+    summary: "加载角色定义，同时确定任务 ID 和工件存放目录；也能在任务之间切换，或初始化 roleflow 骨架。",
+    hint: "<角色名> [任务名] | switch <任务名> | init",
+    usage: [
+      ["/roleflowv2 builder 审批列表", "加载角色并指定任务；任务名可写中文、camelCase 或完整任务 ID"],
+      ["/roleflowv2 planner approveList 4.10.0", "任务名后带版本号，覆盖 package.json 里的版本"],
+      ["/roleflowv2 chat", "不给任务名时，回退到最近的任务"],
+      ["/roleflowv2 switch 授权列表", "切换到另一个任务，当前角色保持不变"],
+      ["/roleflowv2 init", "在当前目录生成 roleflow(v2) 骨架"],
+      ["/roleflowv2", "只列出可用角色"],
+    ],
+    notes: [
+      ["角色名", "必须和角色文件名完全一致，区分大小写，不做模糊匹配"],
+      ["角色目录", "优先用项目里的角色目录，都没有才用全局原型库"],
+      ["工件目录", "`<tasks 根>/<版本号>/<任务ID>/`"],
+    ],
+    related: ["roleflow-orchestrator", "roleflow"],
+  },
+  {
+    name: "roleflow-orchestrator",
+    cat: "flow",
+    summary: "按指定的工作流编排多个角色 subagent 完成复杂任务，在关键节点和开放问题处暂停，等你决定。",
+    hint: "<工作流名> <任务描述> | continue|rerun|status <task-id>",
+    usage: [
+      ["/roleflow-orchestrator feature-medium 加个 dapp 超时提示", "用指定工作流启动新任务"],
+      ["/roleflow-orchestrator continue 2026-05-22-dapp-connection", "改完开放问题后续跑"],
+      ["/roleflow-orchestrator rerun 2026-05-22-dapp-connection", "重跑，工件版本 +1"],
+      ["/roleflow-orchestrator status 2026-05-22-dapp-connection", "查询任务状态"],
+      ["/roleflow-orchestrator", "列出可用工作流和进行中的任务"],
+    ],
+    notes: [
+      ["工作流", "如 feature-medium、onchain-feature、bugfix，以项目 workflows 目录里的文件为准"],
+      ["工件", "落在 `docs/link-ai-prompt/roleflow/artifact/<version>/`"],
+    ],
+    related: ["roleflowv2"],
+  },
+  {
+    name: "roleflow",
+    cat: "flow",
+    summary: "老版角色加载器：加载指定角色的协作规范，之后按该角色的职责和工作流执行。",
+    hint: "<角色名>",
+    usage: [
+      ["/roleflow builder", "加载 builder 角色"],
+      ["/roleflow planner", "已加载角色时再调用即切换，旧角色规则作废"],
+      ["/roleflow", "只列出可用角色"],
+    ],
+    notes: [
+      ["角色名", "精确匹配，区分大小写"],
+      ["角色目录", "项目里的角色目录优先（如 `roleflow/context/roles/`），都没有才用 `~/code/roleflow/roles/`"],
+      ["提示", "需要同时管理任务 ID 和工件目录时用 roleflowv2"],
+    ],
+    related: ["roleflowv2"],
+  },
+
+  /* ---------------- 目标与生活 ---------------- */
+  {
+    name: "progress-goal",
+    cat: "life",
+    auto: true,
+    summary: "评估两条目标线：攒钱主目标离 200 万还差多少，转 AI 这条手段线处在哪个 Tier、完成了多少。",
+    hint: "（无参数）",
+    usage: [
+      ["/progress-goal", "评估并把结果追加到进度表"],
+      ["看我到哪个 tier 了", "这类说法也会触发"],
+    ],
+    notes: [
+      ["读取", "`~/workspace/个人/人生规划/攒钱目标.md` 和 `当前目标.md`"],
+      ["写入", "追加到 `当前目标.md` 的「# 进度」表，同一天重跑覆盖当天行"],
+      ["铁律", "攒够 200 万前，任何降低现金流的转 AI 动作（裸辞、降薪跳槽）一律否决"],
+    ],
+    related: ["progress-saving"],
+  },
+  {
+    name: "progress-saving",
+    cat: "life",
+    summary: "算当前现金资产总额、离攒钱目标还差多少，以及按各档月支出存款能撑多久。",
+    hint: "（无参数）",
+    usage: [
+      ["/progress-saving", "计算并把本次快照写回 md"],
+    ],
+    notes: [
+      ["数据", "`~/workspace/个人/人生规划/攒钱目标.md`，每次重新读取，直接改 md 里的金额即可"],
+      ["口径", "公积金（「不算资产的钱」小节）不计入；港元按实时汇率换算，失败时用固定值"],
+      ["写回", "快照写入「资金变化记录」表，同一天重跑覆盖当天行"],
+    ],
+    related: ["progress-goal"],
+  },
+  {
+    name: "rest-check",
+    cat: "life",
+    summary: "客观判定今天该不该请假：按四条规则读工时和 DOTA 台账，结论由脚本给出，不接受申辩。",
+    hint: "[--take <请假日> | --undo <日期> | --status]",
+    usage: [
+      ["/rest-check", "跑一次判定：🛑 该请假 / ✅ 不该 / 🧊 冷却期内 / ⛔ 配额已用尽"],
+      ["/rest-check --take 2026-09-05", "记录实际休息的那一天（不一定是跑判定的当天）"],
+      ["/rest-check --undo 2026-09-05", "撤销误记"],
+      ["/rest-check --status", "只看基线、配额和冷却期，不写判定历史"],
+    ],
+    notes: [
+      ["规则", "连续 2 周工作超基线 25%；连续 21 天没有完全休息日；工作超载且同周 DOTA 超限；季度过半配额一天没用"],
+      ["配额", "每季度 2 天，支取后冷却 14 天；记在 `~/workspace/个人/生活/休息台账.md`"],
+      ["注意", "休了一定要用 `--take` 记录，否则第 4 条会误触发"],
+    ],
+    related: ["work-time", "dota2-playtime"],
+  },
+  {
+    name: "cheer-me-up",
+    cat: "life",
+    summary: "读你在 `~/workspace/个人` 里的真实经历和近况，写一段具体、真诚的鼓励。",
+    hint: "[主题或篇幅，如：最近工作有点挫败 / 简短一点]",
+    usage: [
+      ["/cheer-me-up", "不带参数直接开始"],
+      ["/cheer-me-up 最近工作有点挫败", "围绕某个主题"],
+      ["/cheer-me-up 简短一点", "控制篇幅"],
+    ],
+    notes: [
+      ["依据", "优先用你自己记录的行动和产出，旧 AI 回答里的夸奖不算证据"],
+      ["触发", "只在点名调用时运行，情绪低落、倾诉都不会自动触发"],
+    ],
+  },
+  {
+    name: "find-offline-events",
+    cat: "life",
+    summary: "全网搜近期能参加的线下活动，并结合你的情况建议适合的活动类型。",
+    hint: "[城市 / 时间 / 主题 / 预算，默认未来30天·北京·IT]",
+    usage: [
+      ["/find-offline-events", "按默认条件搜"],
+      ["/find-offline-events 本周末朝阳区的 AI 开发者活动，预算 100 元以内", "加条件；「只限朝阳」「只要免费」这类硬条件不会放宽"],
+      ["/find-offline-events 下个月上海的摄影活动", "换城市和主题；没说的时间仍按未来 30 天"],
+      ["/find-offline-events 北京的桌游或羽毛球活动，适合一个人参加", "非 IT 主题也可以"],
+    ],
+    notes: [
+      ["默认", "未来 30 天、北京（朝阳优先）、IT 产业，偏 AI 应用 / Agent / 开发者交流"],
+      ["结果", "5–8 个核实过的候选，不凑数；费用如实写，「价格未公布」不当免费"],
+    ],
+  },
+
+  /* ---------------- 投资 ---------------- */
+  {
+    name: "invest-short-review",
+    cat: "invest",
+    summary: "复盘投资标的近几天的异动，分清是个股、板块、大盘还是宏观原因，最后给出明确的操作建议。覆盖 A股科技、美股科技和加密。",
+    hint: "<代码或名称> [时间区间] | daily [A股|美股|币圈]",
+    usage: [
+      ["/invest-short-review NVDA", "复盘单只标的；默认窗口：股票近 5 个交易日，加密近 7 天"],
+      ["/invest-short-review ETH 最近一个月", "自己指定复盘窗口"],
+      ["/invest-short-review daily", "读关注列表，按 A股 / 美股 / 币圈逐只复盘，汇总成一份日报"],
+      ["/invest-short-review daily 币圈", "只跑关注列表里的某一段"],
+    ],
+    notes: [
+      ["异动阈值", "股票单日 ±5% / 累计 ±10%；加密单日 ±8% / 累计 ±20%"],
+      ["单只报告", "`~/workspace/llmWikis/investWiki/others/research`"],
+      ["日报", "`~/workspace/个人/投资分析记录/<YYYY>record/`，按「日期-序号」命名，一天可跑多次"],
+      ["关注列表", "`~/workspace/个人/投资分析记录/关注列表.md`"],
+    ],
+  },
+
+  /* ---------------- 游戏 ---------------- */
+  {
+    name: "dota2-playtime",
+    cat: "game",
+    summary: "统计 Dota2 的真实消耗时间、Plan B 奖励后的周预算与结余，以及天梯上分进度。",
+    hint: "[天数]（不填 = 本自然周）",
+    usage: [
+      ["/dota2-playtime", "当前自然周（含今天），并写入 DOTA2 台账"],
+      ["/dota2-playtime 14", "过去 14 天（截止昨天 24:00，不含今天），只看不写台账"],
+    ],
+    notes: [
+      ["账号", "默认 137084212（伯爵红茶）"],
+      ["周额度", "基础 10h + 当周 planB 项目时长，每做 1h planB 多 1h 额度"],
+      ["台账", "`~/workspace/个人/生活/DOTA2时长.md`；planB 时长读 `工作时长.md` 的周汇总"],
+    ],
+    related: ["work-time", "rest-check"],
+  },
+  {
+    name: "dota2-match-review",
+    cat: "game",
+    summary: "单局数据复盘：对线、击杀、局势转折、我的责任点，以及没拿到 MVP 的原因。",
+    hint: "<match_id | 自然语言，如：最近的那局幽鬼>",
+    usage: [
+      ["/dota2-match-review 8859827264", "用对局编号复盘"],
+      ["/dota2-match-review 最近的那局幽鬼", "不用记编号，自动找到对应对局"],
+      ["/dota2-match-review 倒数第二近的混沌骑士", "按英雄和先后顺序指代"],
+      ["/dota2-match-review 最近一场", "不点名英雄，取最近的对局"],
+    ],
+    notes: [
+      ["账号", "默认 137084212（伯爵红茶）"],
+      ["报告", "`~/code/aiagent-study-self/resources/dota2/复盘/`"],
+      ["判责", "按数据量化队友因素；阵容差距过大就如实判为非战之罪，不硬甩锅也不硬背锅"],
+    ],
+    related: ["dota2-hero-build"],
+  },
+  {
+    name: "dota2-hero-build",
+    cat: "game",
+    summary: "从 B 站教学视频提炼某个英雄在当前版本的出装：什么条件下出什么、为什么、什么时候别出。",
+    hint: "<英雄名> [--patch 7.41d]",
+    usage: [
+      ["/dota2-hero-build 虚空假面", "分析当前版本"],
+      ["/dota2-hero-build 敌法师 --patch 7.41d", "指定小版本"],
+    ],
+    notes: [
+      ["省钱", "先用元数据过滤，再抽 8 秒画面核验，只有两关都过的视频才完整下载和转写"],
+      ["版本", "凑不满 3 个视频就沿小版本往前找，绝不跨大版本"],
+      ["产出", "`~/workspace/aiDownload/dota2/<英雄>-<版本>-<日期>/`，跑完自动删除 mp4 / wav"],
+    ],
+    related: ["dota2-match-review"],
+  },
+
+  /* ---------------- 学习 ---------------- */
+  {
+    name: "english-talk",
+    cat: "learn",
+    summary: "英语口语陪练：按场景全英文对话，每轮给出回复、纠错和生词，讲解用中文。",
+    hint: "[场景，默认 daily] | list | end",
+    usage: [
+      ["/english-talk", "用默认场景 daily 开始"],
+      ["/english-talk dota2", "加载 `scenarios/dota2.md` 的角色、话题和词汇"],
+      ["/english-talk list", "列出所有场景，不开始对话"],
+      ["/english-talk end", "收尾，输出本次小结"],
+    ],
+    notes: [
+      ["记录", "每轮追加到 `~/workspace/个人/生活/English/<场景>/<日期>.md`"],
+      ["生词", "写进同目录的 `词汇.md`，去重并累加出现次数"],
+      ["新场景", "在 `scenarios/<名字>.md` 里按同样结构写一份，文件名就是参数"],
+    ],
+    related: ["english-word-etymology"],
+  },
+  {
+    name: "english-word-etymology",
+    cat: "learn",
+    summary: "给一个英语单词或习语做「词源 + 文化」卡片：词源故事、词根拆解、同根词、名句和影视出处。",
+    hint: "<单词或短语>",
+    usage: [
+      ["/english-word-etymology serendipity", "查单词；running 这类变形会自动还原成原形"],
+      ["/english-word-etymology break the ice", "习语走「典故起源」模板"],
+    ],
+    notes: [
+      ["保存", "`~/workspace/英语学习/EnglishWordWiki/<word>.md`，并更新 `index.md`"],
+      ["出处", "每条都带可核验的链接，查不到就不写"],
+    ],
+    related: ["english-talk", "five-books-field-primer"],
+  },
+  {
+    name: "five-books-field-primer",
+    cat: "learn",
+    summary: "按科特勒「五本书击穿一个领域」的方法，挑 5 本由浅入深的真实书籍，带你从入门摸到前沿。",
+    hint: "<领域>",
+    usage: [
+      ["/five-books-field-primer 量子计算", "挑这个领域的五本书"],
+      ["/five-books-field-primer 行为经济学，偏实操", "可附加偏好：偏理论还是实操、有没有基础"],
+    ],
+    notes: [
+      ["五层", "畅销入门 → 大众进阶 → 半专业 → 专家前沿 → 未来趋势"],
+      ["选书", "中文译本优先；每本都联网核验真实存在"],
+      ["保存", "`~/code/aiagent-study-self/resources/fiveBooks/<领域>.md`"],
+    ],
+  },
+
+  /* ---------------- 采集与转写 ---------------- */
+  {
+    name: "wechat-article-downloader",
+    cat: "collect",
+    summary: "把公众号文章连同图片存成本地 Markdown，图片按原位置下载并改成本地引用。",
+    hint: "<文章链接> [目标目录]",
+    usage: [
+      ["/wechat-article-downloader https://mp.weixin.qq.com/s/XXXX", "存到默认目录"],
+      ["/wechat-article-downloader https://mp.weixin.qq.com/s/XXXX ~/workspace/llmWikis/opcWiki/raw", "存到指定目录"],
+    ],
+    notes: [
+      ["默认目录", "`~/workspace/llmWikis/aiagentWiki/raw/`"],
+      ["附带", "原始 HTML 存档和元信息（公众号、链接、日期）"],
+      ["付费文章", "抓不了，改用 wechat-paid-print-to-md"],
+    ],
+    related: ["wechat-paid-print-to-md"],
+  },
+  {
+    name: "wechat-paid-print-to-md",
+    cat: "collect",
+    summary: "把付费公众号文章从「全选文本 + 打印 PDF」还原成带配图的 Markdown。",
+    hint: "--text <text.txt> --pdf <print.pdf> --out <保存目录>",
+    usage: [
+      ["/wechat-paid-print-to-md --text ~/Downloads/text.txt --pdf ~/Downloads/print.pdf --out ~/workspace/课程", "三个路径都必须给"],
+    ],
+    notes: [
+      ["准备", "在微信浏览器里把文章全选复制成 `text.txt`，再打印成 `print.pdf`"],
+      ["产出", "`<out>/<序号>-<标题>/`；序号默认取 text.txt 所在的目录名"],
+      ["可选", "`--seq`、`--title`、`--heading`（把某行升为标题）、`--code-lang`、`--no-fence`"],
+      ["注意", "路径没有默认值，少给一个就会停下来问"],
+    ],
+    related: ["wechat-article-downloader"],
+  },
+  {
+    name: "x-scraper",
+    cat: "collect",
+    auto: true,
+    summary: "用已登录的浏览器抓取某个 X 账号的历史推文（含折叠长帖全文），整理成按时间排序的 digest。",
+    hint: "@handle [时间范围] [主题]",
+    usage: [
+      ["/x-scraper @handle", "抓这个账号的历史推文"],
+      ["/x-scraper @handle 2026-01-01 ~ 2026-01-31", "限定时间范围"],
+      ["抓取 @某人 关于 AI 芯片的全部发帖", "也可以直接用自然语言"],
+    ],
+    notes: [
+      ["依赖", "Playwright MCP，以及浏览器里已登录的 X 会话"],
+      ["过滤", "默认只留原创长帖（正文 ≥260 字或原本被折叠）"],
+      ["不适用", "抓单条推文直接打开链接即可"],
+    ],
+  },
+  {
+    name: "bili-video-to-text",
+    cat: "collect",
+    auto: true,
+    summary: "下载 B 站视频音轨，用 whisper 转写，整理成分段并加小标题的简体中文文稿。",
+    hint: "<B站视频链接>",
+    usage: [
+      ["/bili-video-to-text https://www.bilibili.com/video/BV1xxxxxxxxx", "转成文字稿"],
+      ["把这个 B 站视频转成文字", "后面贴链接；不点名也会触发"],
+    ],
+    notes: [
+      ["输出", "默认 `~/workspace/aiDownload/<视频短名>/`"],
+      ["模型", "默认 whisper `medium`；要更准用 `large-v3`，但慢很多"],
+      ["区别", "本地视频文件、要 srt 字幕时用 video2text"],
+    ],
+    related: ["video2text"],
+  },
+  {
+    name: "video2text",
+    cat: "collect",
+    auto: true,
+    summary: "本地视频转文字：whisper 生成 srt，非中文的做成中文在上、原文在下的双语字幕，再整理成分段文稿。",
+    hint: "<视频文件路径>",
+    usage: [
+      ["/video2text ~/Movies/talk.mp4", "开始前会先确认语言、水印、是否 OCR 等"],
+      ["给这个视频生成双语字幕", "不点名也会触发"],
+    ],
+    notes: [
+      ["默认", "srt 输出到视频同目录；从 00:00:00 开始；无水印；不做 OCR"],
+      ["产出", "srt 字幕、双语字幕（非中文时）、带小标题的 txt 文稿"],
+    ],
+    related: ["bili-video-to-text"],
+  },
+
+  /* ---------------- 文件与网盘 ---------------- */
+  {
+    name: "md-to-pdf",
+    cat: "files",
+    auto: true,
+    summary: "把 Markdown 渲染成排版规整的 A4 PDF，中文不掉字，表格、引用、代码块都支持。",
+    hint: "<md 文件路径> [输出 pdf 路径]",
+    usage: [
+      ["/md-to-pdf notes.md", "输出到同目录同名 .pdf"],
+      ["/md-to-pdf notes.md ~/Desktop/notes.pdf", "指定输出位置"],
+    ],
+    notes: [
+      ["样式", "用 `--css` 换主题，`--title` 改标题"],
+      ["注意", "走 weasyprint，不用 Chrome headless（会丢中文）"],
+    ],
+    related: ["nutstore-book"],
+  },
+  {
+    name: "nutstore-book",
+    cat: "files",
+    auto: true,
+    summary: "把 md、txt、epub、mobi、docx 等格式转成 A4 PDF，默认放进坚果云「书籍」目录自动上传。",
+    hint: "<文件...> [输出路径，默认坚果云书籍目录]",
+    usage: [
+      ["/nutstore-book book.epub", "转好后放进坚果云书籍目录"],
+      ["/nutstore-book *.mobi", "批量转换"],
+      ["/nutstore-book book.epub ~/Desktop/book.pdf", "指定输出位置"],
+    ],
+    notes: [
+      ["默认目录", "坚果云 `我的坚果云/书籍/` 里日期最接近今天的文件夹，放进去就会上传"],
+      ["依赖", "mobi / azw3 需要 calibre 或 Python 的 `mobi` 包"],
+      ["注意", "测试时指定输出到 /tmp，免得传上坚果云"],
+    ],
+    related: ["md-to-pdf"],
+  },
+  {
+    name: "baidu-share-save",
+    cat: "files",
+    summary: "把一段文本里的百度网盘分享链接逐个转存到你网盘的指定目录，转存后核实是否真的存进去。",
+    hint: "<网盘目标路径> <文本文件路径 | 直接粘贴文本>",
+    usage: [
+      ["/baidu-share-save /资料/课程 ~/Downloads/links.txt", "从文本文件读取链接"],
+      ["/baidu-share-save /资料/课程", "后面直接粘贴含链接的文本"],
+    ],
+    notes: [
+      ["登录", "会打开一个独立的浏览器窗口，在里面登录百度网盘，登录状态会保留"],
+      ["工作目录", "`~/workspace/aiDownload/baidu-share-save/`，每批一个 `runs/<时间>/`，可断点续跑"],
+      ["安全", "保存路径不对绝不点保存；遇到限流或安全验证会暂停等你处理"],
+    ],
+    related: ["pantools-baidu-transfer"],
+  },
+  {
+    name: "pantools-baidu-transfer",
+    cat: "files",
+    summary: "把 PanTools 目录分享页里某个文件夹（含子文件夹）的全部文件，批量转存到百度网盘指定目录。",
+    hint: "<分享链接> [访问密码] [目标网盘目录]",
+    usage: [
+      ["/pantools-baidu-transfer https://list.pantools.cn/u_xxxx 1234 AI视频保存", "链接、密码、目标目录"],
+    ],
+    notes: [
+      ["前提", "目标目录要先在网盘里建好；还要说明从哪个顶层文件夹开始遍历"],
+      ["登录", "在独立浏览器窗口里登录一次，之后会保留"],
+      ["续跑", "进度记在 `progress.json`，中断后会跳过已存的文件"],
+    ],
+    related: ["baidu-share-save"],
+  },
+
+  /* ---------------- 写作发布 ---------------- */
+  {
+    name: "viral-writer",
+    dir: "Viral_Writer_Skill",
+    cat: "write",
+    auto: true,
+    summary: "自媒体写作：把一个主题或素材写成适配公众号、小红书或抖音的完整内容，附标题和配图建议。",
+    hint: "<主题或素材> [公众号|小红书|抖音]",
+    usage: [
+      ["/viral-writer 普通人怎么用 AI 提效 小红书", "指定主题和平台"],
+      ["帮我写一篇公众号文章", "说「写文章」「帮我想标题」等也会触发"],
+    ],
+    notes: [
+      ["默认平台", "微信公众号"],
+      ["命令名", "目录叫 `Viral_Writer_Skill`；斜杠菜单里找不到 `/viral-writer` 时搜这个"],
+    ],
+    related: ["wechat-publisher", "imagegen-yescode"],
+  },
+  {
+    name: "wechat-publisher",
+    cat: "write",
+    auto: true,
+    summary: "把排好版的 HTML 文章和封面图上传到公众号草稿箱。只管发草稿，不写稿也不排版。",
+    hint: "<HTML 文件> [封面图]",
+    usage: [
+      ["/wechat-publisher 发 dist/ai-tips.html", "上传到草稿箱；封面按约定放在 `dist/cover-<topic>.jpg`"],
+      ["上传到公众号草稿箱", "不点名也会触发"],
+    ],
+    notes: [
+      ["工作目录", "`~/code/writerForSelfMedia/`，产物都在 `dist/`"],
+      ["凭证", "`.wechat-config.json`（appid / appsecret），照 `config.example.json` 抄一份"],
+      ["流程", "viral-writer 写稿 → 排版成 HTML → 本 skill 上传草稿"],
+    ],
+    related: ["viral-writer"],
+  },
+  {
+    name: "imagegen-yescode",
+    cat: "write",
+    auto: true,
+    summary: "通过 Responses 风格的接口（如 co.yes.vg）生成 PNG 图片，支持带参考图生成。",
+    hint: "<图片描述> [参考图路径...] [输出路径]",
+    usage: [
+      ["/imagegen-yescode 一只奶油色拉布拉多在教室答物理题，写实风格", "纯文字生成"],
+      ["/imagegen-yescode 照片里的人坐在江景客厅沙发上 raw/selfPhoto/20201101.jpg", "带参考图生成，可以给多张"],
+    ],
+    notes: [
+      ["输出", "默认 `output/imagegen/response-image.png`（相对当前目录）"],
+      ["模型", "默认 `gpt-image-1024x1024`，读取 `OPENAI_API_KEY`"],
+    ],
+    related: ["viral-writer"],
+  },
+
+  /* ---------------- Claude 工具 ---------------- */
+  {
+    name: "token-calc-raw",
+    cat: "tool",
+    summary: "直接从本机 Claude Code 会话日志统计 token 用量和 USD 成本，按模型、按天、按项目分组。",
+    hint: "[过去 N 天 | 起始日期 [~ 结束日期]]",
+    usage: [
+      ["/token-calc-raw 过去 7 天", "含今天共 7 天"],
+      ["/token-calc-raw 5/19 到现在", "从某天到今天"],
+      ["/token-calc-raw 5/19 ~ 5/25", "指定起止日期"],
+    ],
+    notes: [
+      ["数据", "`~/.claude/projects/**/*.jsonl`，不依赖 ccusage"],
+      ["范围", "只算 Claude Code；要连 Codex 一起看用 token-calc"],
+    ],
+    related: ["token-calc"],
+  },
+  {
+    name: "token-calc",
+    cat: "tool",
+    summary: "统计最近 4 周 Claude Code 和 Codex 的 token 用量与周均成本。",
+    hint: "（无参数）",
+    usage: [
+      ["/token-calc", "按周（上周五到本周四）汇总近 4 周"],
+    ],
+    notes: [
+      ["数据", "通过 `npx ccusage` 和 `@ccusage/codex` 取数，需要联网"],
+      ["输出", "两张表加三行摘要，同时存成 CSV 到桌面"],
+    ],
+    related: ["token-calc-raw"],
+  },
+  {
+    name: "claude-code-risk-audit",
+    cat: "tool",
+    summary: "检查本机有没有可能带来 Claude Code 账号风险的环境痕迹：地区、时区、出口 IP、代理残留、BASE_URL 配置等。",
+    hint: "（无参数）",
+    usage: [
+      ["/claude-code-risk-audit", "跑一次检查"],
+    ],
+    notes: [
+      ["只读", "不改环境变量、shell 配置、Claude 设置或凭证"],
+      ["注意", "结果只是自查参考，不代表官方的判定"],
+    ],
+  },
+];
+
+/* ============================================================ */
+
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ICON_COPY = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
+const ICON_OK = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+const ICON_CHEVRON = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+const catVar = key => `--c: var(--cat-${key})`;
+
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+};
+
+let query = "";
+let activeCat = "all";
+// 展开状态：平时用 openSet（会记住）；搜索时用 searchOpen（命中的默认全展开，清空搜索即恢复）
+const openSet = new Set(JSON.parse(store.get("skills-open") || "[]"));
+let searchOpen = new Set();
+
+const isOpen = name => (query ? searchOpen : openSet).has(name);
+function setOpen(name, open) {
+  const set = query ? searchOpen : openSet;
+  open ? set.add(name) : set.delete(name);
+  if (!query) store.set("skills-open", JSON.stringify([...openSet]));
+}
+
+// 转义文本，并把搜索词包进 <mark>
+function hl(raw) {
+  raw = String(raw);
+  const words = query.split(/\s+/).filter(Boolean).map(w => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  if (!words.length) return esc(raw);
+  return raw.split(new RegExp(`(${words.join("|")})`, "gi"))
+    .map((part, i) => i % 2 ? `<mark>${esc(part)}</mark>` : esc(part)).join("");
+}
+// 同 hl()，另外把 `xxx` 渲染成 <code>
+function inline(raw) {
+  return String(raw).split("`").map((seg, i) => i % 2 ? `<code>${hl(seg)}</code>` : hl(seg)).join("");
+}
+function syntaxHtml(name, hint) {
+  const body = esc(hint)
+    .replace(/&lt;[^&]*?&gt;/g, m => `<span class="t-req">${m}</span>`)
+    .replace(/[\[\]]/g, m => `<span class="t-opt">${m}</span>`)
+    .replace(/ \| |\|/g, m => `<span class="t-pipe">${m}</span>`);
+  return `<span class="t-cmd">/${esc(name)}</span> ${body}`;
+}
+
+function matches(s) {
+  if (activeCat !== "all" && s.cat !== activeCat) return false;
+  if (!query) return true;
+  const hay = [s.name, s.dir, s.summary, s.hint, CATEGORIES[s.cat],
+    ...s.usage.flat(), ...(s.notes || []).flat()].join("\n").toLowerCase();
+  return query.toLowerCase().split(/\s+/).filter(Boolean).every(w => hay.includes(w));
+}
+
+function card(s) {
+  const open = isOpen(s.name);
+  const usage = s.usage.map(([cmd, desc]) => `
+      <div class="cmd-wrap"><button class="cmd ${cmd.startsWith("/") ? "" : "nl"}" type="button" data-copy="${esc(cmd)}" title="点击复制">${hl(cmd)}${ICON_COPY}</button></div>
+      <div class="desc"><span>${inline(desc)}</span></div>`).join("");
+  const notes = (s.notes || []).map(([k, v]) => `<dt>${esc(k)}</dt><dd>${inline(v)}</dd>`).join("");
+  const related = (s.related || []).filter(r => SKILLS.some(x => x.name === r))
+    .map(r => `<a href="#${esc(r)}">${esc(r)}</a>`).join("");
+  return `
+  <article class="card" id="${esc(s.name)}" data-open="${open}">
+    <div class="card-top">
+      <div class="card-main">
+        <div class="card-head">
+          <h2 class="card-name">${hl(s.name)}</h2>
+          <span class="tag tag-cat" style="${catVar(s.cat)}">${esc(CATEGORIES[s.cat])}</span>
+          ${s.manual ? '<span class="tag tag-plain" title="disable-model-invocation：Claude 不会自己调用">仅手动输入</span>' : ""}
+          ${s.auto ? '<span class="tag tag-plain" title="不点名，说出相关需求也会触发">可自动触发</span>' : ""}
+          <a class="src" href="skills/${esc(s.dir || s.name)}/SKILL.md" target="_blank" rel="noopener">SKILL.md ↗</a>
+        </div>
+        <p class="summary">${inline(s.summary)}</p>
+      </div>
+      <button class="toggle" type="button" aria-expanded="${open}" aria-controls="body-${esc(s.name)}" aria-label="展开或折叠 ${esc(s.name)}">
+        <span class="count">${s.usage.length} 种用法</span>${ICON_CHEVRON}
+      </button>
+    </div>
+    <div class="syntax">
+      <code>${syntaxHtml(s.name, s.hint)}</code>
+      <button class="icon-btn" type="button" data-copy="/${esc(s.name)} " title="复制命令名" aria-label="复制 /${esc(s.name)}">${ICON_COPY}</button>
+    </div>
+    <div class="card-body" id="body-${esc(s.name)}">
+      <div class="inner"${open ? "" : " inert"}>
+        <div class="label">用法</div>
+        <div class="usage">${usage}</div>
+        ${notes ? `<div class="label">要点</div><dl class="notes">${notes}</dl>` : ""}
+        ${related ? `<div class="related">相关<span>·</span>${related}</div>` : ""}
+      </div>
+    </div>
+  </article>`;
+}
+
+function applyOpen(el, open) {
+  el.dataset.open = open;
+  $(".toggle", el).setAttribute("aria-expanded", open);
+  $(".inner", el).inert = !open;
+}
+
+function visibleCards() { return [...document.querySelectorAll("#cards .card")]; }
+
+function updateBulk() {
+  const cards = visibleCards();
+  const allOpen = cards.length > 0 && cards.every(c => c.dataset.open === "true");
+  const btn = $("#bulk");
+  btn.dataset.action = allOpen ? "collapse" : "expand";
+  btn.innerHTML = `${ICON_CHEVRON.replace("<svg", `<svg style="transform:rotate(${allOpen ? 180 : 0}deg)"`)}${allOpen ? "全部折叠" : "全部展开"}`;
+  btn.hidden = cards.length === 0;
+}
+
+function render() {
+  const list = SKILLS.filter(matches);
+  $("#cards").innerHTML = list.map(card).join("");
+  $("#empty").style.display = list.length ? "none" : "block";
+
+  $("#toc").innerHTML = Object.entries(CATEGORIES).map(([key, label]) => {
+    const items = list.filter(s => s.cat === key);
+    if (!items.length) return "";
+    return `<h4 style="${catVar(key)}">${esc(label)}</h4><ul>${items.map(s => `<li><a href="#${esc(s.name)}">${esc(s.name)}</a></li>`).join("")}</ul>`;
+  }).join("");
+  updateBulk();
+}
+
+function renderChips() {
+  const counts = { all: SKILLS.length };
+  SKILLS.forEach(s => counts[s.cat] = (counts[s.cat] || 0) + 1);
+  const entries = [["all", "全部"], ...Object.entries(CATEGORIES).filter(([k]) => counts[k])];
+  $("#chips").innerHTML = entries.map(([k, label]) =>
+    `<button class="chip" type="button" data-cat="${k}" aria-pressed="${k === activeCat}">${k === "all" ? "" : `<span class="dot" style="${catVar(k)}"></span>`}${esc(label)}<span class="n">${counts[k]}</span></button>`
+  ).join("");
+}
+
+/* ---------- 跳转到某个 skill：必要时清除筛选，展开并高亮 ---------- */
+function goTo(name, smooth = true) {
+  if (!SKILLS.some(s => s.name === name)) return;
+  if (!document.getElementById(name)) {
+    query = ""; $("#q").value = ""; activeCat = "all";
+    renderChips(); render();
+  }
+  const el = document.getElementById(name);
+  setOpen(name, true); applyOpen(el, true); updateBulk();
+  el.scrollIntoView({ behavior: smooth ? "smooth" : "auto", block: "start" });
+  el.classList.add("flash");
+  setTimeout(() => el.classList.remove("flash"), 1600);
+  history.replaceState(null, "", "#" + name);
+}
+
+/* ---------- 交互 ---------- */
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 1400);
+}
+async function copy(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); } finally { ta.remove(); }
+  }
+}
+
+document.addEventListener("click", async e => {
+  const chip = e.target.closest(".chip");
+  if (chip) { activeCat = chip.dataset.cat; renderChips(); render(); return; }
+
+  const anchor = e.target.closest('a[href^="#"]');
+  if (anchor) { e.preventDefault(); goTo(decodeURIComponent(anchor.getAttribute("href").slice(1))); return; }
+
+  const copyBtn = e.target.closest("[data-copy]");
+  if (copyBtn) {
+    await copy(copyBtn.dataset.copy);
+    toast(`已复制：${copyBtn.dataset.copy.trim()}`);
+    if (copyBtn.classList.contains("cmd")) {
+      copyBtn.classList.add("copied"); $("svg", copyBtn).outerHTML = ICON_OK;
+      setTimeout(() => { copyBtn.classList.remove("copied"); const s = $("svg", copyBtn); if (s) s.outerHTML = ICON_COPY; }, 1200);
+    }
+    return;
+  }
+
+  if (e.target.closest("#bulk")) {
+    const open = $("#bulk").dataset.action === "expand";
+    visibleCards().forEach(el => { setOpen(el.id, open); applyOpen(el, open); });
+    updateBulk();
+    return;
+  }
+
+  const top = e.target.closest(".card-top");
+  if (top && !e.target.closest("a")) {
+    if (getSelection().toString()) return; // 选中文字时不折叠
+    const el = top.closest(".card");
+    const open = el.dataset.open !== "true";
+    setOpen(el.id, open); applyOpen(el, open); updateBulk();
+  }
+});
+
+$("#q").addEventListener("input", e => {
+  query = e.target.value.trim();
+  searchOpen = new Set(query ? SKILLS.filter(matches).map(s => s.name) : []);
+  render();
+});
+document.addEventListener("keydown", e => {
+  const inInput = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+  if (e.key === "/" && !inInput) { e.preventDefault(); $("#q").focus(); }
+  if (e.key === "Escape" && document.activeElement === $("#q")) {
+    $("#q").value = ""; query = ""; render(); $("#q").blur();
+  }
+});
+
+/* ---------- 主题 ---------- */
+const root = document.documentElement;
+const savedTheme = store.get("skills-theme");
+if (savedTheme) root.dataset.theme = savedTheme;
+$("#themeBtn").addEventListener("click", () => {
+  const dark = root.dataset.theme
+    ? root.dataset.theme === "dark"
+    : matchMedia("(prefers-color-scheme: dark)").matches;
+  root.dataset.theme = dark ? "light" : "dark";
+  store.set("skills-theme", root.dataset.theme);
+});
+
+$("#sub").textContent = `ai-skills · ${SKILLS.length} 个 skill · 点卡片展开，点命令复制`;
+renderChips();
+render();
+if (location.hash) requestAnimationFrame(() => goTo(decodeURIComponent(location.hash.slice(1)), false));
+</script>
+</body>
+</html>

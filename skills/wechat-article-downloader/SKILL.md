@@ -1,6 +1,7 @@
 ---
 name: wechat-article-downloader
 description: "把微信公众号文章（mp.weixin.qq.com/s/… 链接）连同图片下载/存档成本地 Markdown：正文转 Markdown、图片按原文位置就地下载并改成本地引用、附原始 HTML 存档与元信息（公众号 / 链接 / 日期）。默认存到 /Users/aaron/workspace/llmWikis/aiagentWiki/raw/，可指定其它目录（如其它 wiki 的 raw/）。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户只是贴出公众号链接、或随口说『看看这篇』不算触发。显式调用形式：'/wechat-article-downloader <链接> [目标目录]'、'用 wechat-article-downloader 下载这篇公众号文章'、'调用 wechat-article-downloader 把这篇存到 xxWiki/raw'、'调用 wechat-article-downloader'。"
+argument-hint: "<文章链接> [目标目录]"
 ---
 
 # 微信公众号文章下载器

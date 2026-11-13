@@ -1,0 +1,9 @@
+{
+  "name": "baidu-share-save-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Save Baidu netdisk share links into the user's netdisk via an isolated Chrome over CDP",
+  "dependencies": {
+    "playwright-core": "1.61.0"
+  }
+}

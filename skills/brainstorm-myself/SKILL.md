@@ -1,6 +1,7 @@
 ---
 name: brainstorm-myself
 description: "在动手实现之前，先把模糊的想法通过协作式对话打磨成有共识的设计与 spec。适用于新增功能、构建组件、改动行为、动手前的需求澄清。触发场景：'帮我捋一下这个需求'、'我想做个 XX，先聊聊'、'/brainstorm-myself <主题>'、'先别写代码，先讨论方案'。"
+argument-hint: "<主题或想法>"
 ---
 
 # Brainstorm Myself · 想法 → 设计

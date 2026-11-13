@@ -1,0 +1,6 @@
+interface:
+  display_name: "找线下活动"
+  short_description: "跨平台搜索北京朝阳优先的 IT 线下活动，支持其他主题与个人适配建议"
+  default_prompt: "使用 $find-offline-events，找近期北京、优先朝阳区的 IT 线下活动，并结合我的情况建议适合参加的活动。"
+policy:
+  allow_implicit_invocation: false

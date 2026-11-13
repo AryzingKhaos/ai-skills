@@ -1,6 +1,7 @@
 ---
 name: invest-short-review
 description: "联网做【投资标的短期异动复盘】，覆盖三个市场：A股科技股（芯片/半导体/AI 及产业链）、美股科技股（半导体/AI/大型科技及全球产业链）、加密资产（BTC/ETH/山寨/Meme/L1/L2/DeFi/AI/RWA/DePIN）。核心是讲清最近几天的剧烈涨跌为什么发生，并分清是个股(币)自身 alpha、产业链/板块叙事传导、大盘 beta 还是宏观系统性；平静期也给『近况+产业链(板块)动向』简报，不空手而归。复盘末尾读取 investWiki 投资流派镜头做多派会诊，并收敛成一份明确、可执行的投资建议(方向买/加/持/减/清/观望＋力度＋操作要点＋改判条件＋置信度)。执行时先判市场，再读对应的市场文件 a-share.md / us-stock.md / crypto.md——窗口、异动阈值、取数脚本、对比维度、镜头权重都由市场文件规定（股票默认近5个交易日、单日±5%/累计±10%；加密默认近7天、单日±8%/累计±20%）。报告默认存到 /Users/aaron/workspace/llmWikis/investWiki/others/research。另有 daily 子命令 '/invest-short-review daily'：重读 关注列表.md（按 A股/美股/币圈 分三段），逐只复盘后汇总成一份按『日期-序号』命名的日报存到 /Users/aaron/workspace/个人/投资分析记录/<YYYY>record/，细则见 daily.md。**只有显式调用才能使用此 skill**，禁止模糊匹配触发——用户只是聊某只票某个币、随口问『这股今天为啥涨』『BTC 为啥跌』都不算。显式调用形式：'/invest-short-review <代码或名称> [时间区间]'、'/invest-short-review daily'、'/invest-short-review daily 币圈'、'用 invest-short-review 复盘 NVDA'。"
+argument-hint: "<代码或名称> [时间区间] | daily [A股|美股|币圈]"
 ---
 
 # 投资标的 · 短期复盘（invest-short-review）
